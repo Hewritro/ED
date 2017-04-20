@@ -3,6 +3,7 @@
 #include <cstdint>
 #include "BlamTypes.hpp"
 #include "BitStream.hpp"
+#include "BlamPlayers.hpp"
 
 namespace Blam
 {
