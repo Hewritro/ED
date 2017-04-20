@@ -188,8 +188,14 @@ namespace Patches
 
 			uint32_t numLevels = Pointer(levelsGlobalPtr + 0x34).Read<uint32_t>();
 
-			const wchar_t* search[12] = { L"guardian", L"riverworld", L"s3d_avalanche", L"s3d_edge", L"s3d_reactor", L"s3d_turf", L"cyberdyne", L"chill", L"deadlock", L"bunkerworld", L"shrine", L"zanzibar" };
-			const wchar_t* names[12] = { L"Guardian", L"Valhalla", L"Diamondback", L"Edge", L"Reactor", L"Icebox", L"The Pit", L"Narrows", L"High Ground", L"Standoff", L"Sandtrap", L"Last Resort" };
+			const wchar_t* search[12] = { 
+				L"guardian", L"riverworld", L"s3d_avalanche", L"s3d_edge", L"s3d_reactor", L"s3d_turf", 
+				L"cyberdyne", L"chill", L"deadlock", L"bunkerworld", L"shrine", L"zanzibar" 
+				};
+			const wchar_t* names[12] = { 
+				L"Guardian", L"Valhalla", L"Diamondback", L"Edge", L"Reactor", L"Icebox", 
+				L"The Pit", L"Narrows", L"High Ground", L"Standoff", L"Sandtrap", L"Last Resort" 
+				};
 			// TODO: Get names/descs using string ids? Seems the unic tags have descs for most of the maps
 			const wchar_t* descs[12] = {
 				L"Millennia of tending has produced trees as ancient as the Forerunner structures they have grown around. 2-6 players.",

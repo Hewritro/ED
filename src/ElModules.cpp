@@ -88,7 +88,6 @@ namespace Modules
 		ModuleSettings::Instance();
 		ModuleCamera::Instance();
 		ModuleInput::Instance();
-		ModuleVoIP::Instance();
 		ModuleTime::Instance();
 		ModuleGraphics::Instance();
 

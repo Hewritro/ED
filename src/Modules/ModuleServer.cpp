@@ -12,7 +12,6 @@
 
 #include "../ThirdParty/HttpRequest.hpp"
 #include "../ThirdParty/rapidjson/document.h"
-#include "../VoIP/TeamspeakClient.hpp"
 #include "../Blam/BlamNetwork.hpp"
 #include "../Console/GameConsole.hpp"
 #include "../Server/VariableSynchronization.hpp"
@@ -424,14 +423,6 @@ namespace
 		Pointer::Base(0x1E40BB4).Write(xnetInfo, 0x10);
 		Pointer::Base(0x1E40BD4).Write(xnetInfo + 0x10, 0x10);
 		Pointer::Base(0x1E40BE4).Write<uint32_t>(1);
-
-		// start voip
-		if (Modules::ModuleVoIP::Instance().VarVoIPEnabled->ValueInt == 1) 
-		{
-			//Make sure teamspeak is stopped before we try to start it.
-			StopTeamspeakClient();
-			CreateThread(0, 0, StartTeamspeakClient, 0, 0, 0);
-		}
 
 		returnInfo = "Attempting connection to " + address + "...";
 		return true;
