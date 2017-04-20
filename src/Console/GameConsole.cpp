@@ -206,6 +206,20 @@ bool GameConsole::keyDownCallBack(const Blam::Input::KeyEvent& key)
 			currentInput.del();
 		}
 		break;
+  
+	case KeyCodes::eKeyCodesHome:
+		if (!currentInput.currentInput.empty())
+		{
+			currentInput.home();
+		}
+		break;
+
+	case KeyCodes::eKeyCodesEnd:
+		if (!currentInput.currentInput.empty())
+		{
+			currentInput.end();
+		}
+		break;
 
 	case KeyCodes::eKeyCodesPageUp:
 		if (selectedQueue->startIndexForScrolling < selectedQueue->numOfLinesBuffer - selectedQueue->numOfLinesToShow)
@@ -327,22 +341,12 @@ bool GameConsole::keyTypedCallBack(const Blam::Input::KeyEvent& key)
 void GameConsole::mouseCallBack(RAWMOUSE mouseInfo)
 {
 	if (mouseInfo.usButtonFlags == RI_MOUSE_WHEEL)
-	{
 		if ((short) mouseInfo.usButtonData > 0)
-		{
 			if (selectedQueue->startIndexForScrolling < selectedQueue->numOfLinesBuffer - selectedQueue->numOfLinesToShow)
-			{
 				selectedQueue->startIndexForScrolling++;
-			}
-		}
 		else
-		{
 			if (selectedQueue->startIndexForScrolling > 0)
-			{
 				selectedQueue->startIndexForScrolling--;
-			}
-		}
-	}
 }
 
 void GameConsole::gameInputCallBack()

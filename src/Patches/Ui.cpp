@@ -15,7 +15,9 @@ using namespace Patches::Ui;
 namespace
 {
 	void __fastcall UI_MenuUpdateHook(void* a1, int unused, int menuIdToLoad);
+
 	int UI_ShowHalo3PauseMenu(uint32_t a1, uint32_t a2, uint32_t a3, uint32_t a4, uint32_t a5);
+	void UI_EndGame();
 	char __fastcall UI_Forge_ButtonPressHandlerHook(void* a1, int unused, uint8_t* controllerStruct);
 	char __fastcall UI_ButtonPressHandlerHook(void* a1, int unused, uint8_t* controllerStruct);
 	void LocalizedStringHook();
@@ -78,9 +80,13 @@ namespace Patches
 
 		void ApplyAll()
 		{
-			// Fix for leave game button to show H3 pause menu
-			Hook(0x3B6826, &UI_ShowHalo3PauseMenu, HookFlags::IsCall).Apply();
+			// Rewire $hq.MatchmakingLeaveQueue() to end the game
+			Hook(0x3B6826, UI_EndGame, HookFlags::IsCall).Apply();
 			Patch::NopFill(Pointer::Base(0x3B6826 + 5), 1);
+
+			// Rewire $hf2pEngine.PerformLogin() to show the pause menu
+			Hook(0x234756, &UI_ShowHalo3PauseMenu, HookFlags::IsCall).Apply();
+			Patch::NopFill(Pointer::Base(0x234756 + 5), 1);
 
 			// Allows you to press B to close the H3 pause menu
 			// TODO: find out what the byte that's being checked does, we're just patching out the check here but maybe it's important
@@ -629,6 +635,17 @@ namespace
 		Patches::Ui::DialogShow = true;
 
 		return 1;
+	}
+  
+	void UI_EndGame()
+	{
+		auto session = Blam::Network::GetActiveSession();
+		if (!session || !session->IsEstablished())
+			return;
+		if (session->IsHost())
+			Blam::Network::EndGame();
+		else
+			Blam::Network::LeaveGame();
 	}
 
 	std::chrono::high_resolution_clock::time_point PrevTime = std::chrono::high_resolution_clock::now();

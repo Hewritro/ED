@@ -379,5 +379,11 @@ namespace Blam
 
 		// Kicks a player.
 		bool BootPlayer(int playerIndex, int reason);
+
+		// Requests to end the game.
+		bool EndGame();
+
+		// Leaves the current game.
+		void LeaveGame();
 	}
 }

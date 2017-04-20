@@ -2,6 +2,7 @@
 #include <sstream>
 #include <iostream>
 #include <fstream>
+#include "ElDorito.hpp"
 namespace
 {
 	bool CommandHelp(const std::vector<std::string>& Arguments, std::string& returnInfo)
@@ -62,6 +63,12 @@ namespace
 	bool CommandWriteConfig(const std::vector<std::string>& Arguments, std::string& returnInfo)
 	{
 		std::string prefsName = "dewrito_prefs.cfg";
+		if (ElDorito::Instance().GetInstanceName() != "")
+		{
+			std::stringstream ss;
+			ss << "dewrito_prefs_" << ElDorito::Instance().GetInstanceName() << ".cfg";
+			prefsName = ss.str();
+		}
 		if (Arguments.size() > 0)
 			prefsName = Arguments[0];
 

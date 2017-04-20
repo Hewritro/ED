@@ -12,6 +12,8 @@ namespace
 	void ProcessUiInputHook();
 	void QuickUpdateUiInputHook();
 	void KeyTestHook();
+	char GetControllerStateHook(int dwUserIndex, int a2, void *a3);
+	DWORD SetControllerVibrationHook(int dwUserIndex, int a2, char a3);
 
 	std::stack<std::shared_ptr<InputContext>> contextStack;
 	std::vector<DefaultInputHandler> defaultHandlers;
@@ -29,6 +31,8 @@ namespace Patches
 			Hook(0x106417, QuickUpdateUiInputHook, HookFlags::IsCall).Apply();
 			Hook(0x111B66, KeyTestHook, HookFlags::IsCall).Apply();
 			Hook(0x111CE6, KeyTestHook, HookFlags::IsCall).Apply();
+			Hook(0x1128FB, GetControllerStateHook, HookFlags::IsCall).Apply();
+			Hook(0x11298B, SetControllerVibrationHook, HookFlags::IsCall).Apply();
 		}
 
 		void PushContext(std::shared_ptr<InputContext> context)
@@ -134,5 +138,22 @@ namespace
 			lea eax, [eax + 2]
 			jmp eax
 		}
+	}
+
+	char GetControllerStateHook(int dwUserIndex, int a2, void *a3)
+	{
+		typedef char(*GetControllerStatePtr)(int dwUserIndex, int a2, void *a3);
+		auto GetControllerState = reinterpret_cast<GetControllerStatePtr>(0x65EF60);
+
+		return GetControllerState(Modules::ModuleInput::Instance().VarInputControllerPort->ValueInt, a2, a3);
+	}
+
+
+	DWORD SetControllerVibrationHook(int dwUserIndex, int a2, char a3)
+	{
+		typedef char(*SetControllerVibrationPtr)(int dwUserIndex, int a2, char a3);
+		auto SetControllerVibration = reinterpret_cast<SetControllerVibrationPtr>(0x65F220);
+
+		return SetControllerVibration(Modules::ModuleInput::Instance().VarInputControllerPort->ValueInt, a2, a3);
 	}
 }

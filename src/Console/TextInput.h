@@ -34,6 +34,18 @@ public:
 		if (currentPointerIndex < currentInput.size())
 			currentInput.erase(currentPointerIndex, 1);
 	}
+  
+	void home()
+	{
+		if (currentPointerIndex > 0)
+			currentPointerIndex = 0;
+	}
+
+	void end()
+	{
+		if (currentPointerIndex < currentInput.size())
+			currentPointerIndex = currentInput.size();
+	}
 
 	void left()
 	{

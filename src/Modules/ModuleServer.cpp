@@ -705,19 +705,20 @@ namespace
 			return false;
 		}
 
-		int peerIdx = session->MembershipInfo.FindFirstPeer();
-		while (peerIdx != -1)
+		int playerIdx = session->MembershipInfo.FindFirstPlayer();
+		while (playerIdx != -1)
 		{
-			int playerIdx = session->MembershipInfo.GetPeerPlayer(peerIdx);
-			if (playerIdx != -1)
+			auto player = session->MembershipInfo.PlayerSessions[playerIdx];
+			auto name = Utils::String::ThinString(player.Properties.DisplayName);
+			ss << std::dec << "[" << playerIdx << "] \"" << name << "\" (uid: " << std::hex << player.Properties.Uid;
+			if (session->IsHost())
 			{
-				auto* player = &session->MembershipInfo.PlayerSessions[playerIdx];
-				auto name = Utils::String::ThinString(player->DisplayName);
-				auto ip = session->GetPeerAddress(peerIdx);
-				ss << std::dec << "[" << playerIdx << "] \"" << name << "\" (uid: " << std::hex << player->Uid << ", ip: " << IpToString(ip) << ")" << std::endl;
+				auto ip = session->GetPeerAddress(session->MembershipInfo.GetPlayerPeer(playerIdx));
+				ss << ", ip: " << ip.ToString();
 			}
+			ss << ")" << std::endl;
 
-			peerIdx = session->MembershipInfo.FindNextPeer(peerIdx);
+			playerIdx = session->MembershipInfo.FindNextPlayer(playerIdx);
 		}
 
 		returnInfo = ss.str();
