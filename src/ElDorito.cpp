@@ -10,7 +10,6 @@
 #include "Utils/Utils.hpp"
 #include "ElPatches.hpp"
 #include "Patches/Network.hpp"
-#include "ThirdParty/WebSockets.hpp"
 #include "Server/ServerChat.hpp"
 #include "Server/VariableSynchronization.hpp"
 #include "Server/BanList.hpp"
@@ -123,7 +122,6 @@ void ElDorito::Initialize()
 	// Initialize server modules
 	Server::Chat::Initialize();
 	Server::VariableSynchronization::Initialize();
-	CreateThread(0, 0, StartRconWebSocketServer, 0, 0, 0);
 }
 
 void ElDorito::Tick(const std::chrono::duration<double>& DeltaTime)

@@ -358,30 +358,6 @@ namespace Patches
 			Patch(0x5A8BB, { 0xEB }).Apply();
 		}
 
-		bool StartRemoteConsole()
-		{
-			if (rconSocketOpen)
-				return true;
-
-			HWND hwnd = Pointer::Base(0x159C014).Read<HWND>();
-			if (hwnd == 0)
-				return false;
-
-			rconSocket = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
-			SOCKADDR_IN bindAddr;
-			bindAddr.sin_family = AF_INET;
-			bindAddr.sin_addr.s_addr = htonl(INADDR_LOOPBACK);
-			bindAddr.sin_port = htons(2448);
-
-			// open our listener socket
-			bind(rconSocket, (PSOCKADDR)&bindAddr, sizeof(bindAddr));
-			WSAAsyncSelect(rconSocket, hwnd, WM_RCON, FD_ACCEPT | FD_CLOSE);
-			listen(rconSocket, 5);
-			rconSocketOpen = true;
-
-			return true;
-		}
-
 		bool StartInfoServer()
 		{
 			if (infoSocketOpen)
