@@ -149,7 +149,9 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="src\Blam\BitStream.hpp" />
+    <ClInclude Include="src\Blam\BlamData.hpp" />
     <ClInclude Include="src\Blam\BlamInput.hpp" />
+    <ClInclude Include="src\Blam\BlamPlayers.hpp" />
     <ClInclude Include="src\Blam\BlamNetwork.hpp" />
     <ClInclude Include="src\Blam\BlamTypes.hpp" />
     <ClInclude Include="src\Blam\Tags\Tags.hpp" />
@@ -209,7 +211,9 @@
     <ClInclude Include="src\Pointer.hpp" />
     <ClInclude Include="src\resource.h" />
     <ClCompile Include="src\Blam\BitStream.cpp" />
+    <ClCompile Include="src\Blam\BlamData.cpp" />
     <ClCompile Include="src\Blam\BlamInput.cpp" />
+    <ClCompile Include="src\Blam\BlamPlayers.cpp" />
     <ClCompile Include="src\Blam\BlamNetwork.cpp" />
     <ClCompile Include="src\DirectXHook.cpp" />
     <ClCompile Include="src\Console\GameConsole.cpp" />
