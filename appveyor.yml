@@ -7,9 +7,6 @@ os: Windows Server 2012 R2
 init:
   - git config --global core.autocrlf input
 
-install:
-  - SET PATH=C:\Program Files (x86)\MSBuild\14.0\bin\;%PATH%
-
 # clone directory
 clone_folder: c:\projects\ED
 
@@ -18,10 +15,6 @@ configuration: Release
 
 build:
   project: c:\projects\ED\ElDorito.vcxproj      # path to Visual Studio solution or project
-
-# scripts to run before build
-before_build:
-  - cd c:\projects\ED
 
 # scripts to run after build
 after_build:
