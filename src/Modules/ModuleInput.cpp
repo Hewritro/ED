@@ -736,7 +736,7 @@ namespace
 		{ "Back", eGameActionMoveBack },
 		{ "Left", eGameActionMoveLeft },
 		{ "Right", eGameActionMoveRight },
- +		{ "Sprint", eGameActionSprint },
+		{ "Sprint", eGameActionSprint },
 		{ "Jump", eGameActionJump },
 		{ "Crouch", eGameActionCrouch },
 		{ "Use", eGameActionUse },
