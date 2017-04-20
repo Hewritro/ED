@@ -1,7 +1,7 @@
 version: 0.5.1.{build}
 
 # Operating system (build VM template)
-os: Previous Visual Studio 2017
+os: Windows Server 2012 R2
 
 # scripts that are called at very beginning, before repo cloning
 init:
@@ -15,6 +15,10 @@ configuration: Release
 
 build:
   project: c:\projects\ED\ElDorito.vcxproj      # path to Visual Studio solution or project
+
+# scripts to run before build
+before_build:
+  - cd c:\projects\ED
 
 # scripts to run after build
 after_build:
