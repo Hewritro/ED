@@ -51,11 +51,6 @@ endif()
 # Enable solution folders
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 
-# Subdirectories
-add_subdirectory(libs/lua-5.3.0)
-add_subdirectory(libs/libzplay)
-add_subdirectory(libs/MedalJunk)
-
 # Library directories
 link_directories($ENV{DXSDK_DIR}/Lib/x86)
 link_directories(${CMAKE_SOURCE_DIR}/libs/detours/lib.X86)
@@ -220,12 +215,9 @@ target_link_libraries(ElDorito
   detours
   libeay32MT
   ts3client_win32
-  ts3client_win64
   ts3server_win32
-  ts3server_win64
   ZLib
   libwebsocketswin32
-  MedalJunk
   psapi)
 
 target_compile_definitions(ElDorito PRIVATE NOMINMAX) # Prevent windows.h from defining min() and max()
