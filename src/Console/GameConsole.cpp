@@ -372,7 +372,4 @@ void GameConsole::gameInputCallBack()
 	// TODO: Should we keep this since we have the server browser option on the menu now?
 	if (GetKeyTicks(eKeyCodesF11, eInputTypeUi) == 1)
 		Menu::Instance().setEnabled(true);
-
-	if (GetKeyTicks(eKeyCodesF12, eInputTypeUi) == 1)
-		DirectXHook::drawVoIPSettings = !DirectXHook::drawVoIPSettings;
 }

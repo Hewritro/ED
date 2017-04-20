@@ -40,9 +40,6 @@
     <ClCompile Include="src\Modules\ModuleSettings.cpp">
       <Filter>Source Files\Modules</Filter>
     </ClCompile>
-    <ClCompile Include="src\Modules\ModuleVoIP.cpp">
-      <Filter>Source Files\Modules</Filter>
-    </ClCompile>
     <ClCompile Include="src\Modules\ModuleTime.cpp">
       <Filter>Source Files\Modules</Filter>
     </ClCompile>
@@ -133,15 +130,6 @@
     <ClCompile Include="src\Utils\VersionInfo.cpp">
       <Filter>Source Files\Utils</Filter>
     </ClCompile>
-    <ClCompile Include="src\VoIP\MemberList.cpp">
-      <Filter>Source Files\VoIP</Filter>
-    </ClCompile>
-    <ClCompile Include="src\VoIP\TeamspeakClient.cpp">
-      <Filter>Source Files\VoIP</Filter>
-    </ClCompile>
-    <ClCompile Include="src\VoIP\TeamspeakServer.cpp">
-      <Filter>Source Files\VoIP</Filter>
-    </ClCompile>
     <ClCompile Include="src\Menu.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -217,9 +205,6 @@
       <Filter>Header Files\Modules</Filter>
     </ClInclude>
     <ClInclude Include="src\Modules\ModuleSettings.hpp">
-      <Filter>Header Files\Modules</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Modules\ModuleVoIP.hpp">
       <Filter>Header Files\Modules</Filter>
     </ClInclude>
     <ClInclude Include="src\Modules\ModuleTime.hpp">
@@ -327,15 +312,6 @@
     <ClInclude Include="src\Utils\VersionInfo.hpp">
       <Filter>Header Files\Utils</Filter>
     </ClInclude>
-    <ClInclude Include="src\VoIP\MemberList.hpp">
-      <Filter>Header Files\VoIP</Filter>
-    </ClInclude>
-    <ClInclude Include="src\VoIP\TeamspeakClient.hpp">
-      <Filter>Header Files\VoIP</Filter>
-    </ClInclude>
-    <ClInclude Include="src\VoIP\TeamspeakServer.hpp">
-      <Filter>Header Files\VoIP</Filter>
-    </ClInclude>
     <ClInclude Include="src\Menu.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -390,9 +366,6 @@
     <Filter Include="Source Files\Utils">
       <UniqueIdentifier>{6EEE44BB-54C7-4D55-B89C-0DF9549EB42F}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\VoIP">
-      <UniqueIdentifier>{3FCEBA79-A5FC-45B1-85CD-C2D49E2FF6C8}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\Blam">
       <UniqueIdentifier>{5EAE3DD4-8A6A-4063-A190-3A99B752AB3A}</UniqueIdentifier>
     </Filter>
@@ -413,9 +386,6 @@
     </Filter>
     <Filter Include="Header Files\Utils">
       <UniqueIdentifier>{67A3A881-BD31-46AD-A431-51787CBCB3C7}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\VoIP">
-      <UniqueIdentifier>{88DDB73A-333E-4AD6-9101-3EFD558BAC0B}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source Files">
       <UniqueIdentifier>{8768D8CB-5DC5-4307-B452-B86A1E3109A7}</UniqueIdentifier>

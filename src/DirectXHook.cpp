@@ -1,13 +1,6 @@
 #include "DirectXHook.hpp"
 #include "Console/GameConsole.hpp"
 #include <detours.h>
-#include "VoIP/MemberList.hpp"
-#include "VoIP/TeamspeakClient.hpp"
-#include "Modules/ModuleVoIP.hpp"
-#include <teamspeak/public_definitions.h>
-#include <teamspeak/public_errors.h>
-#include <teamspeak/clientlib_publicdefinitions.h>
-#include <teamspeak/clientlib.h>
 #include "Menu.hpp"
 
 uint32_t* DirectXHook::horizontalRes = 0;
@@ -24,7 +17,6 @@ LPD3DXFONT DirectXHook::largeSizeFont = 0;
 HRESULT(__stdcall * DirectXHook::origEndScenePtr)(LPDIRECT3DDEVICE9) = 0;
 HRESULT(__stdcall * DirectXHook::origDrawIndexedPrimitivePtr)(LPDIRECT3DDEVICE9, D3DPRIMITIVETYPE, INT, UINT, UINT, UINT, UINT) = 0;
 
-bool DirectXHook::drawVoIPSettings = false;
 int DirectXHook::helpMessageStartTime = 0;
 
 HRESULT __stdcall DirectXHook::hookedEndScene(LPDIRECT3DDEVICE9 device)
@@ -37,16 +29,6 @@ HRESULT __stdcall DirectXHook::hookedEndScene(LPDIRECT3DDEVICE9 device)
 	DirectXHook::pDevice->SetViewport(&viewport);
 
 	initFontsIfRequired();
-
-	DirectXHook::drawVoipMembers();
-	if (!GameConsole::Instance().disableUI)
-	{
-		DirectXHook::drawChatInterface();
-	}
-	if (drawVoIPSettings)
-	{
-		DirectXHook::drawVoipSettings();
-	}
 
 	DirectXHook::drawHelpMessage();
 
@@ -102,16 +84,12 @@ void DirectXHook::drawHelpMessage()
 		y += verticalSpacingBetweenEachLine;
 		drawText(x, y, COLOR_WHITE, ">>>>>>>>>>> F11 = Server Browser <<<<<<<<<<< Click this to join a game/server.", largeSizeFont);
 		y += verticalSpacingBetweenEachLine;
-		drawText(x, y, COLOR_WHITE, "F12 = VOIP settings", largeSizeFont);
-		y += verticalSpacingBetweenEachLine;
 		drawText(x, y, COLOR_WHITE, "T = Chat", largeSizeFont);
 		y += verticalSpacingBetweenEachLine;
 		y += verticalSpacingBetweenEachLine;
 		drawText(x, y, COLOR_RED, "Server Hosting Instructions", largeSizeFont);
 		y += verticalSpacingBetweenEachLine;
 		drawText(x, y, COLOR_WHITE, "If you want to host, use the Halo 3 menu by using your arrow keys, and the Enter, Escape, and X buttons on your keyboard.", largeSizeFont);
-		y += verticalSpacingBetweenEachLine;
-		drawText(x, y, COLOR_WHITE, "You need to port forward: 11775, 11774, and 9987. 9987 is for in-game VoIP.", largeSizeFont);
 		y += verticalSpacingBetweenEachLine;
 		y += verticalSpacingBetweenEachLine;
 		drawText(x, y, COLOR_RED, "Common Bugs", largeSizeFont);
@@ -122,77 +100,6 @@ void DirectXHook::drawHelpMessage()
 		y += verticalSpacingBetweenEachLine;
 		drawText(x, y, COLOR_WHITE, "3. If server browser doesn't work, go to http://eldewrito.github.io/menu/, open the console (F1 key or ` key) and type: connect <ip address>", largeSizeFont);
 		y += verticalSpacingBetweenEachLine;
-	}
-}
-
-void DirectXHook::drawVoipSettings()
-{
-	int x = (int)(0.28375 * *horizontalRes);
-	int y = (int)(0.25 * *verticalRes);
-	int width = (int)(0.5 * *horizontalRes);
-	int height = (int)(0.3 * *verticalRes);
-	int verticalSpacingBetweenEachLine = (int)(1.3 * largeSizeFontHeight);
-
-	auto& voipvars = Modules::ModuleVoIP::Instance();
-	drawBox(x-1, y-1, width+2, height+2, COLOR_WHITE, COLOR_WHITE);
-	drawBox(x, y, width, height, COLOR_BLACK, COLOR_BLACK);
-	drawText(centerTextHorizontally("ElDewrito VoIP Settings", x, width, largeSizeFont), y, COLOR_WHITE, "ElDewrito VoIP Settings", largeSizeFont);
-
-	y += verticalSpacingBetweenEachLine;
-	if (voipvars.VarVoIPPushToTalk->ValueInt == 0){
-		drawText(centerTextHorizontally("Voice activation detection is enabled.", x, width, largeSizeFont), y, COLOR_WHITE, "Voice activation detection is enabled.", largeSizeFont);
-		y += verticalSpacingBetweenEachLine;
-		drawText(centerTextHorizontally("Change VoIP.PushToTalk to 1 for push to talk.", x, width, largeSizeFont), y, COLOR_WHITE, "Change VoIP.PushToTalk to 1 for push to talk.", largeSizeFont);
-	}
-	else
-	{
-		//TODO: Get key from keybinding
-		drawText(centerTextHorizontally("VoIP.PushToTalk is enabled. Hold Caps-Lock to talk", x, width, largeSizeFont), y, COLOR_WHITE, "VoIP.PushToTalk is enabled. Hold Caps-Lock to talk", largeSizeFont);
-		y += verticalSpacingBetweenEachLine;
-		drawText(centerTextHorizontally("Change VoIP.PushToTalk to 0 for Voice Activation", x, width, largeSizeFont), y, COLOR_WHITE, "Change VoIP.PushToTalk to 0 for Voice Activation", largeSizeFont);
-	}
-	y += verticalSpacingBetweenEachLine;
-
-	/*
-	unsigned int error;
-	float result;
-	uint64 vadTestscHandlerID = VoIPGetVadHandlerID();
-	int vadTestTalkStatus = VoIPGetTalkStatus();
-
-	if ((error = ts3client_getPreProcessorInfoValueFloat(vadTestscHandlerID, "decibel_last_period", &result)) != ERROR_ok) {
-		drawText(centerTextHorizontally("Error getting vad level", x, width, largeSizeFont), y, COLOR_RED, "Error getting vad level", largeSizeFont);
-	}
-	else
-	{
-		drawText(centerTextHorizontally(("%.2f - %s", result, (vadTestTalkStatus == STATUS_TALKING ? "talking" : "not talking")), x, width, largeSizeFont), y, (vadTestTalkStatus == STATUS_TALKING ? COLOR_GREEN : COLOR_RED), ("%.2f - %s", result, (vadTestTalkStatus == STATUS_TALKING ? "talking" : "not talking")), largeSizeFont);
-	}
-	*/
-	drawText(centerTextHorizontally("Type \"bind KEY +VoIP.Talk\" to change PushToTalk Key", x, width, largeSizeFont), y, COLOR_WHITE, "Type \"bind KEY +VoIP.Talk\" to change PushToTalk Key", largeSizeFont);
-
-	y += verticalSpacingBetweenEachLine * 2;
-
-	drawText(centerTextHorizontally("Voice activation threshold: -50", x, width, largeSizeFont), y, COLOR_WHITE, "Voice activation threshold: -50", largeSizeFont);
-
-	y += verticalSpacingBetweenEachLine;
-	//TODO: Get key from keybinding
-	drawText(centerTextHorizontally("Push to talk key: Caps Lock", x, width, largeSizeFont), y, COLOR_WHITE, "Push to talk key: Caps Lock", largeSizeFont);
-}
-
-void DirectXHook::drawVoipMembers()
-{
-	auto& memberList = MemberList::Instance();
-
-	int x = (int) (0.88 * *horizontalRes);
-	int y = (int) (0.27 * *verticalRes);
-	int fontHeight = (int)(0.017 * *verticalRes);
-	int verticalSpacingBetweenEachLine = (int)(0.5 * fontHeight);
-
-	for (size_t i = 0; i < memberList.memberList.size(); i++)
-	{
-		//TODO: If player is on red team, display red text. Blue, show blue text.
-		//TODO: If game is slayer, or "no team" just display white text.
-		drawText(x, y, COLOR_WHITE, memberList.memberList.at(i).c_str(), normalSizeFont);
-		y += fontHeight + verticalSpacingBetweenEachLine;
 	}
 }
 

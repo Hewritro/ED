@@ -165,7 +165,6 @@
     <ClInclude Include="src\Modules\ModulePlayer.hpp" />
     <ClInclude Include="src\Modules\ModuleServer.hpp" />
     <ClInclude Include="src\Modules\ModuleSettings.hpp" />
-    <ClInclude Include="src\Modules\ModuleVoIP.hpp" />
     <ClInclude Include="src\Modules\ModuleTime.hpp" />
     <ClInclude Include="src\Modules\ModuleGraphics.hpp" />
     <ClInclude Include="src\Patches\Armor.hpp" />
@@ -201,9 +200,6 @@
     <ClInclude Include="src\Utils\String.hpp" />
     <ClInclude Include="src\Utils\Utils.hpp" />
     <ClInclude Include="src\Utils\VersionInfo.hpp" />
-    <ClInclude Include="src\VoIP\MemberList.hpp" />
-    <ClInclude Include="src\VoIP\TeamspeakClient.hpp" />
-    <ClInclude Include="src\VoIP\TeamspeakServer.hpp" />
     <ClInclude Include="src\Menu.hpp" />
     <ClInclude Include="src\Settings.hpp" />
     <ClInclude Include="src\CommandMap.hpp" />
@@ -226,7 +222,6 @@
     <ClCompile Include="src\Modules\ModulePlayer.cpp" />
     <ClCompile Include="src\Modules\ModuleServer.cpp" />
     <ClCompile Include="src\Modules\ModuleSettings.cpp" />
-    <ClCompile Include="src\Modules\ModuleVoIP.cpp" />
     <ClCompile Include="src\Modules\ModuleTime.cpp" />
     <ClCompile Include="src\Modules\ModuleGraphics.cpp" />
     <ClCompile Include="src\Patches\Armor.cpp" />
@@ -257,9 +252,6 @@
     <ClCompile Include="src\Utils\DebugLog.cpp" />
     <ClCompile Include="src\Utils\String.cpp" />
     <ClCompile Include="src\Utils\VersionInfo.cpp" />
-    <ClCompile Include="src\VoIP\MemberList.cpp" />
-    <ClCompile Include="src\VoIP\TeamspeakClient.cpp" />
-    <ClCompile Include="src\VoIP\TeamspeakServer.cpp" />
     <ClCompile Include="src\Menu.cpp" />
     <ClCompile Include="src\CommandMap.cpp" />
     <ClCompile Include="src\ElDorito.cpp">
