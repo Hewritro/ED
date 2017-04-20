@@ -5,8 +5,6 @@
 #include "ModuleServer.hpp"
 #include <sstream>
 #include <fstream>
-#include <algorithm>
-#include <random>
 #include "../ElDorito.hpp"
 #include "../Patches/Network.hpp"
 #include "../Patches/PlayerUid.hpp"
@@ -442,7 +440,7 @@ namespace
 			if (playerIdx == -1)
 				continue;
 			auto* player = &membership->PlayerSessions[playerIdx];
-			if (Utils::String::ThinString(player->Properties.DisplayName) == name)
+			if (Utils::String::ThinString(player->DisplayName) == name)
 				return playerIdx;
 		}
 		return -1;
@@ -461,7 +459,7 @@ namespace
 			if (playerIdx == -1)
 				continue;
 			auto* player = &membership->PlayerSessions[playerIdx];
-			if (player->Properties.Uid == uid)
+			if (player->Uid == uid)
 				indices.push_back(playerIdx);
 		}
 		return indices;
@@ -553,7 +551,7 @@ namespace
 		for (auto playerIdx : indices)
 		{
 			auto ip = IpToString(session->GetPeerAddress(session->MembershipInfo.GetPlayerPeer(playerIdx)));
-			auto kickPlayerName = Utils::String::ThinString(session->MembershipInfo.PlayerSessions[playerIdx].Properties.DisplayName);
+			auto kickPlayerName = Utils::String::ThinString(session->MembershipInfo.PlayerSessions[playerIdx].DisplayName);
 			if (!Blam::Network::BootPlayer(playerIdx, 4))
 			{
 				returnInfo += "Failed to kick player " + kickPlayerName + "\n";
@@ -598,8 +596,8 @@ namespace
 			return false;
 		}
 		auto player = &session->MembershipInfo.PlayerSessions[index];
-		auto kickPlayerName = Utils::String::ThinString(player->Properties.DisplayName);
-		auto ip = IpToString(session->GetPeerAddress(player->Properties.PeerIndex));
+		auto kickPlayerName = Utils::String::ThinString(player->DisplayName);
+		auto ip = IpToString(session->GetPeerAddress(player->PeerIndex));
 		if (!Blam::Network::BootPlayer(index, 4))
 		{
 			returnInfo = "Failed to kick player " + kickPlayerName;
@@ -707,20 +705,19 @@ namespace
 			return false;
 		}
 
-		int playerIdx = session->MembershipInfo.FindFirstPlayer();
-		while (playerIdx != -1)
+		int peerIdx = session->MembershipInfo.FindFirstPeer();
+		while (peerIdx != -1)
 		{
-			auto player = session->MembershipInfo.PlayerSessions[playerIdx];
-			auto name = Utils::String::ThinString(player.Properties.DisplayName);
-			ss << std::dec << "[" << playerIdx << "] \"" << name << "\" (uid: " << std::hex << player.Properties.Uid;
-			if (session->IsHost())
+			int playerIdx = session->MembershipInfo.GetPeerPlayer(peerIdx);
+			if (playerIdx != -1)
 			{
-				auto ip = session->GetPeerAddress(session->MembershipInfo.GetPlayerPeer(playerIdx));
-				ss << ", ip: " << ip.ToString();
+				auto* player = &session->MembershipInfo.PlayerSessions[playerIdx];
+				auto name = Utils::String::ThinString(player->DisplayName);
+				auto ip = session->GetPeerAddress(peerIdx);
+				ss << std::dec << "[" << playerIdx << "] \"" << name << "\" (uid: " << std::hex << player->Uid << ", ip: " << IpToString(ip) << ")" << std::endl;
 			}
-			ss << ")" << std::endl;
 
-			playerIdx = session->MembershipInfo.FindNextPlayer(playerIdx);
+			peerIdx = session->MembershipInfo.FindNextPeer(peerIdx);
 		}
 
 		returnInfo = ss.str();
@@ -811,53 +808,6 @@ namespace
 		session->Observer->Ping(0, channelIndex, PingId);
 		return true;
 	}
-  
-	bool CommandServerShuffleTeams(const std::vector<std::string>& Arguments, std::string& returnInfo)
-	{
-		auto session = Blam::Network::GetActiveSession();
-		if (!session || !session->IsEstablished())
-		{
-			returnInfo = "No session available";
-			return false;
-		}
-		if (!session->HasTeams())
-		{
-			returnInfo = "Teams are not enabled";
-			return false;
-		}
-
-		// Build an array of active player indices
-		int players[Blam::Network::MaxPlayers];
-		auto numPlayers = 0;
-		auto &membership = session->MembershipInfo;
-		for (auto player = membership.FindFirstPlayer(); player >= 0; player = membership.FindNextPlayer(player))
-		{
-			players[numPlayers] = player;
-			numPlayers++;
-		}
-
-		// Shuffle it
-		static std::random_device rng;
-		static std::mt19937 urng(rng());
-		std::shuffle(&players[0], &players[numPlayers], urng);
-
-		// Assign the first half to blue and the second half to red
-		// If there are an odd number of players, the extra player will be assigned to red
-		for (auto i = 0; i < numPlayers; i++)
-		{
-			auto team = (i < numPlayers / 2) ? 1 : 0;
-			membership.PlayerSessions[players[i]].Properties.ClientProperties.TeamIndex = team;
-		}
-		membership.Update();
-
-		// Send a chat message to notify players about the shuffle
-		//Server::Chat::PeerBitSet peers;
-		peers.set();
-		//Server::Chat::SendServerMessage("Teams have been shuffled.", peers);
-
-		returnInfo = "Teams have been shuffled.";
-		return true;
-	}
 
 	void PongReceived(const Blam::Network::NetworkAddress &from, uint32_t timestamp, uint16_t id, uint32_t latency)
 	{
@@ -916,12 +866,6 @@ namespace Modules
 	ModuleServer::ModuleServer() : ModuleBase("Server")
 	{
 		VarServerName = AddVariableString("Name", "server_name", "The name of the server", eCommandFlagsArchived, "HaloOnline Server");
-		VarServerNameClient = AddVariableString("NameClient", "server_name_client", "", eCommandFlagsInternal);
-		Server::VariableSynchronization::Synchronize(VarServerName, VarServerNameClient);
-
-		VarServerMessage = AddVariableString("Message", "server_msg", "Text to display on the loading screen (limited to 512 chars)", eCommandFlagsArchived, "");
-		VarServerMessageClient = AddVariableString("MessageClient", "server_msg_client", "", eCommandFlagsInternal);
-		Server::VariableSynchronization::Synchronize(VarServerMessage, VarServerMessageClient);
 
 		VarServerPassword = AddVariableString("Password", "password", "The server password", eCommandFlagsArchived, "");
 
@@ -960,8 +904,6 @@ namespace Modules
 		AddCommand("ListPlayers", "list", "Lists players in the game (currently host only)", eCommandFlagsHostOnly, CommandServerListPlayers);
 
 		AddCommand("Ping", "ping", "Ping a server", eCommandFlagsNone, CommandServerPing, { "[ip] The IP address of the server to ping. Omit to ping the host." });
-
-		AddCommand("ShuffleTeams", "shuffleteams", "Evenly distributes players between the red and blue teams", eCommandFlagsHostOnly, CommandServerShuffleTeams);
 		
 		VarServerMode = AddVariableInt("Mode", "mode", "Changes the game mode for the server. 0 = Xbox Live (Open Party); 1 = Xbox Live (Friends Only); 2 = Xbox Live (Invite Only); 3 = Online; 4 = Offline;", eCommandFlagsNone, 4, CommandServerMode);
 		VarServerMode->ValueIntMin = 0;

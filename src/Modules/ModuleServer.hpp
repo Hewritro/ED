@@ -1,7 +1,6 @@
 #pragma once
 
 #include "ModuleBase.hpp"
-#include <cstdint>
 
 namespace Modules
 {
@@ -9,9 +8,6 @@ namespace Modules
 	{
 	public:
 		Command* VarServerName;
-		Command* VarServerNameClient;
-		Command* VarServerMessage;
-		Command* VarServerMessageClient;
 		Command* VarServerPassword;
 		Command* VarServerCountdown;
 		Command* VarServerMaxPlayers;
@@ -33,7 +29,7 @@ namespace Modules
 		Command* VarChatLogEnabled;
 		Command* VarChatLogPath;
 
-		uint8_t SyslinkData[0x176];
+		BYTE SyslinkData[0x176];
 
 		ModuleServer();
 	};

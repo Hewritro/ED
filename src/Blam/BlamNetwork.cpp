@@ -36,20 +36,6 @@ namespace Blam
 			auto MembershipFindNextPeer = reinterpret_cast<MembershipFindNextPeerPtr>(0x44E710);
 			return MembershipFindNextPeer(this, lastPeer);
 		}
-  
-		int SessionMembership::FindFirstPlayer() const
-		{
-			typedef int(__thiscall *MembershipFindFirstPlayerPtr)(const SessionMembership *thisPtr);
-			auto MembershipFindFirstPlayer = reinterpret_cast<MembershipFindFirstPlayerPtr>(0x44E6C0);
-			return MembershipFindFirstPlayer(this);
-		}
-
-		int SessionMembership::FindNextPlayer(int lastPlayer) const
-		{
-			typedef int(__thiscall *MembershipFindNextPlayerPtr)(const SessionMembership *thisPtr, int lastPlayer);
-			auto MembershipFindNextPlayer = reinterpret_cast<MembershipFindNextPlayerPtr>(0x44E750);
-			return MembershipFindNextPlayer(this, lastPlayer);
-		}
 
 		int SessionMembership::GetPeerPlayer(int peer) const
 		{
@@ -70,15 +56,7 @@ namespace Blam
 			auto playerIndex = GetPeerPlayer(peer);
 			if (playerIndex < 0)
 				return -1;
-			return PlayerSessions[playerIndex].Properties.TeamIndex;
-		}
-  
-		void SessionMembership::Update()
-		{
-			// The engine does this all over the place
-			// These properties are almost always incremented together, so it's hard to tell what they actually do individually
-			PlayerUpdateCount++;
-			PeerUpdateCount++;
+			return PlayerSessions[playerIndex].TeamIndex;
 		}
 
 		void Observer::ObserverChannelSendMessage(int ownerIndex, int channelIndex, bool secure, int id, int packetSize, const void *packet)
@@ -203,20 +181,6 @@ namespace Blam
 			typedef bool(__cdecl *Network_squad_session_boot_playerPtr)(int playerIndex, int reason);
 			auto Network_squad_session_boot_player = reinterpret_cast<Network_squad_session_boot_playerPtr>(0x437D60);
 			return Network_squad_session_boot_player(playerIndex, reason);
-		}
-
-		bool EndGame()
-		{
-			typedef bool(__cdecl *Network_squad_session_end_gamePtr)();
-			auto Network_squad_session_end_game = reinterpret_cast<Network_squad_session_end_gamePtr>(0x438780);
-			return Network_squad_session_end_game();
-		}
-
-		void LeaveGame()
-		{
-			typedef void(__cdecl *Network_LeaveGamePtr)();
-			auto Network_LeaveGame = reinterpret_cast<Network_LeaveGamePtr>(0xA81270);
-			Network_LeaveGame();
 		}
 	}
 }

@@ -10,6 +10,7 @@
 #include "Utils/Utils.hpp"
 #include "ElPatches.hpp"
 #include "Patches/Network.hpp"
+#include "ThirdParty/WebSockets.hpp"
 #include "Server/ServerChat.hpp"
 #include "Server/VariableSynchronization.hpp"
 #include "Server/BanList.hpp"
@@ -56,47 +57,17 @@ void ElDorito::Initialize()
 {
 	::CreateDirectoryA(GetDirectory().c_str(), NULL);
 
-	// Parse command-line commands
-	int numArgs = 0;
-	LPWSTR* szArgList = CommandLineToArgvW(GetCommandLineW(), &numArgs);
-
-	//Check for the instance switch before initializing anything
-	if (szArgList && numArgs > 1)
-	{
-		for (int i = 1; i < numArgs; i++)
-		{
-			std::wstring arg = std::wstring(szArgList[i]);
-			if (arg.compare(L"-instance") == 0 && i < numArgs - 1)
-			{
-				instanceName = Utils::String::ThinString(szArgList[i + 1]);
-
-				std::wstringstream wss;
-				wss << "preferences_" << szArgList[i + 1] << ".dat";
-				std::wstring preferencesName = wss.str();
-				wchar_t* str = new wchar_t[preferencesName.size()];
-				wcscpy(str, preferencesName.c_str());
-				Pointer(0x189D3F0).Write<wchar_t*>(str);
-			}
-		}
-	}
-
 	// init our command modules
 	Modules::ElModules::Instance();
 
 	// load variables/commands from cfg file
-	// If instancing is enabled then load the instanced dewrito_prefs.cfg
-	if (instanceName != "")
-	{
-		std::stringstream ss;
-		ss << "Execute dewrito_prefs_" << instanceName << ".cfg";
-		Modules::CommandMap::Instance().ExecuteCommand(ss.str());
-	}
-	else
-	{
-		Modules::CommandMap::Instance().ExecuteCommand("Execute dewrito_prefs.cfg");
-	}
+	Modules::CommandMap::Instance().ExecuteCommand("Execute dewrito_prefs.cfg");
 	Modules::CommandMap::Instance().ExecuteCommand("Execute autoexec.cfg"); // also execute autoexec, which is a user-made cfg guaranteed not to be overwritten by ElDew
 
+	// Parse command-line commands
+	int numArgs = 0;
+	LPWSTR* szArgList = CommandLineToArgvW(GetCommandLineW(), &numArgs);
+	bool skipKill = false;
 	bool dedicated = false;
 
 	if( szArgList && numArgs > 1 )
@@ -109,9 +80,12 @@ void ElDorito::Initialize()
 			if( arg.compare(0, 1, L"-") != 0 ) // if it doesn't start with -
 				continue;
 
-
+#ifdef _DEBUG
 			if (arg.compare(L"-dedicated") == 0)
+			{
 				dedicated = true;
+			}
+#endif
 
 			size_t pos = arg.find(L"=");
 			if( pos == std::wstring::npos || arg.length() <= pos + 1 ) // if it doesn't contain an =, or there's nothing after the =
@@ -149,6 +123,7 @@ void ElDorito::Initialize()
 	// Initialize server modules
 	Server::Chat::Initialize();
 	Server::VariableSynchronization::Initialize();
+	CreateThread(0, 0, StartRconWebSocketServer, 0, 0, 0);
 }
 
 void ElDorito::Tick(const std::chrono::duration<double>& DeltaTime)

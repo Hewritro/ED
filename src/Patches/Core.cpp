@@ -4,7 +4,6 @@
 #include "../ElPatches.hpp"
 #include "../Patch.hpp"
 #include "../Blam/Tags/Scenario.hpp"
-#include "../Blam/BlamPlayers.hpp"
 
 namespace
 {
@@ -15,11 +14,8 @@ namespace
 	void FmodSystemInitHook();
 	//void FmodSystemInitHook2();
 	double GetAspectRatio();
-	bool LoadMapHook(void *data);
 	void LoadLevelHook(uint8_t* data, char n2, int n3, int n4);
 	void GameStartHook();
-
-	std::vector<Patches::Core::MapLoadedCallback> mapLoadedCallbacks;
 }
 
 namespace Patches
@@ -103,18 +99,8 @@ namespace Patches
 			Patch::NopFill(Pointer::Base(0x10BF1B), 2);
 			Patch::NopFill(Pointer::Base(0x10BF21), 6);
 
-			// Map loading
-			Hook(0x10FC2C, LoadMapHook, HookFlags::IsCall).Apply();
-			Hook(0x1671BE, LoadMapHook, HookFlags::IsCall).Apply();
-			Hook(0x167B4F, LoadMapHook, HookFlags::IsCall).Apply();
-
 			Hook(0x14C7FF, LoadLevelHook, HookFlags::IsCall).Apply();
 			Hook(0x133069, GameStartHook, HookFlags::IsCall).Apply();
-		}
-
-		void OnMapLoaded(MapLoadedCallback callback)
-		{
-			mapLoadedCallbacks.push_back(callback);
 		}
 	}
 }
@@ -200,9 +186,12 @@ namespace
 			return;
 		}
 
-		// Get the player's grenade setting
-		auto &players = Blam::Players::GetPlayers();
-		auto grenadeSetting = players[playerIndex].SpawnGrenadeSetting;
+		// Get the player's grenade setting (haxhaxhax)
+		const size_t DatumArrayPtrOffset = 0x44;
+		const size_t PlayerSize = 0x2F08;
+		const size_t GrenadeSettingOffset = 0x2DB4;
+		auto grenadeSettingPtr = ElDorito::GetMainTls(GameGlobals::Players::TLSOffset)[0][DatumArrayPtrOffset](PlayerSize * playerIndex + GrenadeSettingOffset);
+		auto grenadeSetting = grenadeSettingPtr.Read<int16_t>();
 
 		// Get the current scenario tag
 		auto scenario = Blam::Tags::GetCurrentScenario();
@@ -239,19 +228,6 @@ namespace
 	{
 		int* gameResolution = reinterpret_cast<int*>(0x19106C0);
 		return ((double)gameResolution[0] / (double)gameResolution[1]);
-	}
-
-	bool LoadMapHook(void *data)
-	{
-		typedef bool(*LoadMapPtr)(void *data);
-		auto LoadMap = reinterpret_cast<LoadMapPtr>(0x566EF0);
-		if (!LoadMap(data))
-			return false;
-
-		for (auto &&callback : mapLoadedCallbacks)
-			callback(static_cast<const char*>(data) + 0x24); // hax
-
-		return true;
 	}
 
 	void LoadLevelHook(uint8_t* data, char n2, int n3, int n4)

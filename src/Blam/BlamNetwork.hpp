@@ -3,7 +3,6 @@
 #include <cstdint>
 #include "BlamTypes.hpp"
 #include "BitStream.hpp"
-#include "BlamPlayers.hpp"
 
 namespace Blam
 {
@@ -51,19 +50,56 @@ namespace Blam
 		};
 		static_assert(sizeof(PeerChannel) == 0xC, "Invalid PeerChannel size");
 
+		struct ColorIndexes
+		{
+			enum
+			{
+				Primary = 0,
+				Secondary,
+				Visor,
+				Lights,
+				Holo,
+
+				Count
+			};
+		};
+
+		struct ArmorIndexes
+		{
+			enum
+			{
+				Helmet = 0,
+				Chest,
+				Shoulders,
+				Arms,
+				Legs,
+				Acc,
+				Pelvis,
+
+				Count
+			};
+		};
+
+		struct CustomizationData
+		{
+			uint32_t Colors[ColorIndexes::Count];
+			uint8_t Armor[ArmorIndexes::Count];
+		};
+		static_assert(sizeof(CustomizationData) == 0x1C, "Invalid CustomizationData size");
+
 		struct PlayerSession
 		{
 			uint32_t Unknown0;
 			uint32_t Unknown4;
 			uint32_t Unknown8;
 			int PeerIndex;
-			uint32_t Unknown10;
-			uint32_t Unknown14;
-			uint32_t Unknown18;
-			uint32_t Unknown1C;
-			Players::PlayerProperties Properties;
-			uint32_t Unknown1640;
-			uint32_t Unknown1644;
+			uint8_t Unknown10[0x40];
+			uint64_t Uid;
+			wchar_t DisplayName[16];
+			int TeamIndex;
+			uint8_t Unknown7C[0x66C];
+			CustomizationData Customization;
+			uint8_t Unknown704[0xF44];
 		};
 		static_assert(sizeof(PlayerSession) == 0x1648, "Invalid PlayerSession size");
 
@@ -72,7 +108,7 @@ namespace Blam
 		{
 			int Unknown0;
 			int Unknown4;
-			int PlayerUpdateCount; // ?
+			int Unknown8;
 			int UnknownC;
 			int HostPeerIndex;
 			int Unknown14;
@@ -81,12 +117,11 @@ namespace Blam
 			int Unknown20;
 			int Unknown24;
 			PeerInfo Peers[MaxPeers];
-			uint32_t Unknown10A0;
-			uint32_t ActivePlayerMask; // If a bit is set, the corresponding player is active
+			uint8_t Unknown10A0[0x8];
 			PlayerSession PlayerSessions[MaxPlayers];
 			uint8_t Unknown17528[0x18C7F8];
 			int LocalPeerIndex;
-			int PeerUpdateCount; // ?
+			int Unknown1A3D24;
 			PeerChannel PeerChannels[MaxPeers];
 			uint8_t Unknown1A3DF8[0x12C];
 
@@ -95,12 +130,6 @@ namespace Blam
 
 			// Finds the next available connected peer, or -1 if none.
 			int FindNextPeer(int lastPeer) const;
-  
-			// Finds the first available connected player, or -1 if none.
-			int FindFirstPlayer() const;
-
-			// Finds the next available connected player, or -1 if none.
-			int FindNextPlayer(int lastPlayer) const;
 
 			// Gets the player index corresponding to a peer, or -1 if none.
 			int GetPeerPlayer(int peer) const;
@@ -111,10 +140,6 @@ namespace Blam
 			// Gets a peer's team index, or -1 on failure.
 			// Note that -1 does NOT mean that teams are disabled.
 			int GetPeerTeam(int peer) const;
-
-			// Signals that membership data has been changed and needs to be updated.
-			// Call this after modifying player or peer data.
-			void Update();
 		};
 		static_assert(sizeof(SessionMembership) == 0x1A3F20, "Invalid c_network_session_membership size");
 
@@ -354,11 +379,5 @@ namespace Blam
 
 		// Kicks a player.
 		bool BootPlayer(int playerIndex, int reason);
-
-		// Requests to end the game.
-		bool EndGame();
-
-		// Leaves the current game.
-		void LeaveGame();
 	}
 }

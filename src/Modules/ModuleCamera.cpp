@@ -196,23 +196,6 @@ namespace
 	//	return true;
 	//}
 
-	bool VariableCameraPositionUpdate(const std::vector<std::string>& Arguments, std::string& returnInfo) {
-		Pointer &directorGlobalsPtr = ElDorito::GetMainTls(GameGlobals::Director::TLSOffset)[0];
-
-		if (Arguments.size() < 1 || Arguments.size() > 3) {
-			std::stringstream ss;
-			ss << "X: " << directorGlobalsPtr(0x834).Read<float>() << ", Y: " << directorGlobalsPtr(0x838).Read<float>() << ", Z: " << directorGlobalsPtr(0x83C).Read<float>();
-			returnInfo = ss.str();
-			return false;
-		}
-
-		// update position
-		directorGlobalsPtr(0x834).Write<float>(std::stof(Arguments[0]));// X
-		directorGlobalsPtr(0x838).Write<float>(std::stof(Arguments[1]));// Y
-		directorGlobalsPtr(0x83C).Write<float>(std::stof(Arguments[2]));// Z
-		return true;
-	}
-
 	bool VariableCameraModeUpdate(const std::vector<std::string>& Arguments, std::string& returnInfo)
 	{
 		auto mode = Utils::String::ToLower(Modules::ModuleCamera::Instance().VarCameraMode->ValueString);
@@ -356,8 +339,6 @@ namespace Modules
 		VarCameraSpeed = AddVariableFloat("Speed", "camera_speed", "The camera speed", eCommandFlagsArchived, 0.1f, VariableCameraSpeedUpdate);
 		VarCameraSpeed->ValueFloatMin = 0.01f;
 		VarCameraSpeed->ValueFloatMax = 5.0f;
-		
-		VarCameraPosition = AddCommand("Position", "camera_position", "The cameras position, Doesn't work when camera mode is set to default", eCommandFlagsNone, VariableCameraPositionUpdate, { "X Coordinate", "Y Coordinate", "Z Coordinate" });
 
 		this->VarCameraMode = AddVariableString("Mode", "camera_mode", "Camera mode, valid modes: default, first, third, flying, static", 
 			(CommandFlags)(eCommandFlagsDontUpdateInitial | eCommandFlagsCheat), "default", VariableCameraModeUpdate);
@@ -396,8 +377,8 @@ namespace Modules
 		float iUp = directorGlobalsPtr(0x868).Read<float>();
 		float jUp = directorGlobalsPtr(0x86C).Read<float>();
 		float kUp = directorGlobalsPtr(0x870).Read<float>();
-		float iRight = cos(hLookAngle + 3.14159265359f / 2);
-		float jRight = sin(hLookAngle + 3.14159265359f / 2);
+		float iRight = cos(hLookAngle + 3.14159265359 / 2);
+		float jRight = sin(hLookAngle + 3.14159265359 / 2);
 
 		// TODO: use shockfire's keyboard hooks instead
 
@@ -462,11 +443,11 @@ namespace Modules
 
 		if (GetAsyncKeyState('Z') & 0x8000)
 		{
-			fov -= 0.003f;
+			fov -= 0.003;
 		}
 		if (GetAsyncKeyState('C') & 0x8000)
 		{
-			fov += 0.003f;
+			fov += 0.003;
 		}
 
 		// update position

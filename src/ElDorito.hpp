@@ -36,13 +36,11 @@ public:
 	void Tick(const std::chrono::duration<double>& DeltaTile);
 	void OnMainMenuShown();
 	bool IsHostPlayer();
-	std::string GetInstanceName() const { return instanceName; }
 
 private:
 	static size_t MainThreadID; // Thread
 	bool executeCommandQueue = false;
 	static bool(__cdecl * Video_InitD3D)(bool, bool);
-	std::string instanceName = "";
 
 	void setWatermarkText(const std::string& Message);
 	void killProcessByName(const char *filename, int ourProcessID);

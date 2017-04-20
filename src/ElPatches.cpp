@@ -48,6 +48,7 @@ namespace Patches
 	void ApplyOnFirstTick()
 	{
 		Ui::ApplyMapNameFixes();
+		Network::StartRemoteConsole();
 	}
 
 	void ApplyAfterTagsLoaded()

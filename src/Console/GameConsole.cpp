@@ -135,7 +135,9 @@ void GameConsole::displayChat(bool console)
 	if (console)
 	{
 		if (selectedQueue != &consoleQueue)
+		{
 			lastChatQueue = selectedQueue;
+		}
 		selectedQueue = &consoleQueue;
 		showConsole = true;
 	}
@@ -173,11 +175,11 @@ bool GameConsole::consoleKeyCallBack()
 
 bool GameConsole::keyDownCallBack(const Blam::Input::KeyEvent& key)
 {
-	using Blam::Input::KeyCode;
+	using Blam::Input::KeyCodes;
 
 	switch (key.Code)
 	{
-	case KeyCode::eKeyCodeEnter:
+	case KeyCodes::eKeyCodesEnter:
 		if (!currentInput.currentInput.empty())
 		{
 			selectedQueue->unchangingBacklog.push_back(currentInput.currentInput);
@@ -187,49 +189,51 @@ bool GameConsole::keyDownCallBack(const Blam::Input::KeyEvent& key)
 		hideConsole();
 		return false;
 
-	case KeyCode::eKeyCodeEscape:
+	case KeyCodes::eKeyCodesEscape:
 		hideConsole();
 		return false;
 
-	case KeyCode::eKeyCodeBack:
+	case KeyCodes::eKeyCodesBack:
 		if (!currentInput.currentInput.empty())
+		{
 			currentInput.backspace();
+		}
 		break;
 
-	case KeyCode::eKeyCodeDelete:
+	case KeyCodes::eKeyCodesDelete:
 		if (!currentInput.currentInput.empty())
+		{
 			currentInput.del();
-		break;
-  
-	case KeyCode::eKeyCodeHome:
-		if (!currentInput.currentInput.empty())
-			currentInput.home();
+		}
 		break;
 
-	case KeyCode::eKeyCodeEnd:
-		if (!currentInput.currentInput.empty())
-			currentInput.end();
-		break;
-
-	case KeyCode::eKeyCodePageUp:
+	case KeyCodes::eKeyCodesPageUp:
 		if (selectedQueue->startIndexForScrolling < selectedQueue->numOfLinesBuffer - selectedQueue->numOfLinesToShow)
+		{
 			selectedQueue->startIndexForScrolling++;
+		}
 		break;
 
-	case KeyCode::eKeyCodePageDown:
+	case KeyCodes::eKeyCodesPageDown:
 		if (selectedQueue->startIndexForScrolling > 0)
+		{
 			selectedQueue->startIndexForScrolling--;
+		}
 		break;
 
-	case KeyCode::eKeyCodeUp:
+	case KeyCodes::eKeyCodesUp:
 		currentBacklogIndex++;
 		if (currentBacklogIndex > (int)selectedQueue->unchangingBacklog.size() - 1)
+		{
 			currentBacklogIndex--;
+		}
 		if (currentBacklogIndex >= 0)
+		{
 			currentInput.currentInput = selectedQueue->unchangingBacklog.at(selectedQueue->unchangingBacklog.size() - currentBacklogIndex - 1);
+		}
 		break;
 
-	case KeyCode::eKeyCodeDown:
+	case KeyCodes::eKeyCodesDown:
 		currentBacklogIndex--;
 		if (currentBacklogIndex < 0)
 		{
@@ -237,23 +241,29 @@ bool GameConsole::keyDownCallBack(const Blam::Input::KeyEvent& key)
 			currentInput.currentInput = "";
 		}
 		else
+		{
 			currentInput.currentInput = selectedQueue->unchangingBacklog.at(selectedQueue->unchangingBacklog.size() - currentBacklogIndex - 1);
+		}
 		break;
 
-	case KeyCode::eKeyCodeLeft:
+	case KeyCodes::eKeyCodesLeft:
 		currentInput.left();
 		break;
 
-	case KeyCode::eKeyCodeRight:
+	case KeyCodes::eKeyCodesRight:
 		currentInput.right();
 		break;
 
-	case KeyCode::eKeyCodeTab:
+	case KeyCodes::eKeyCodesTab:
 		if (currentInput.currentInput.find_first_of(" ") == std::string::npos && currentInput.currentInput.length() > 0)
 		{
 			if (tabHitLast)
+			{
 				if (currentCommandList.size() > 0)
+				{
 					currentInput.set(currentCommandList.at((++tryCount) % currentCommandList.size()));
+				}
+			}
 			else
 			{
 				tryCount = 0;
@@ -269,7 +279,9 @@ bool GameConsole::keyDownCallBack(const Blam::Input::KeyEvent& key)
 					std::transform(commandName.begin(), commandName.end(), commandName.begin(), ::tolower);
 
 					if (commandName.compare(0, currentLine.length(), currentLine) == 0)
+					{
 						currentCommandList.push_back(commandName);
+					}
 				}
 				consoleQueue.pushLineFromGameToUI(std::to_string(currentCommandList.size()) + " commands found starting with \"" + currentLine + ".\"");
 				consoleQueue.pushLineFromGameToUI("Press tab to go through them.");
@@ -277,7 +289,7 @@ bool GameConsole::keyDownCallBack(const Blam::Input::KeyEvent& key)
 		}
 		break;
 
-	case KeyCode::eKeyCodeV:
+	case KeyCodes::eKeyCodesV:
 		if (!(key.Modifiers & Blam::Input::eKeyEventModifiersCtrl)) // CTRL+V pasting
 			break;
 		if (!OpenClipboard(nullptr))
@@ -300,7 +312,7 @@ bool GameConsole::keyDownCallBack(const Blam::Input::KeyEvent& key)
 		CloseClipboard();
 		break;
 	}
-	tabHitLast = (key.Code == KeyCode::eKeyCodeTab);
+	tabHitLast = (key.Code == KeyCodes::eKeyCodesTab);
 	return true;
 }
 
@@ -315,60 +327,49 @@ bool GameConsole::keyTypedCallBack(const Blam::Input::KeyEvent& key)
 void GameConsole::mouseCallBack(RAWMOUSE mouseInfo)
 {
 	if (mouseInfo.usButtonFlags == RI_MOUSE_WHEEL)
+	{
 		if ((short) mouseInfo.usButtonData > 0)
+		{
 			if (selectedQueue->startIndexForScrolling < selectedQueue->numOfLinesBuffer - selectedQueue->numOfLinesToShow)
+			{
 				selectedQueue->startIndexForScrolling++;
+			}
+		}
 		else
+		{
 			if (selectedQueue->startIndexForScrolling > 0)
+			{
 				selectedQueue->startIndexForScrolling--;
+			}
+		}
+	}
 }
 
 void GameConsole::gameInputCallBack()
 {
 	using namespace Blam::Input;
-  
-	BindingsTable bindings;
-	GetBindings(0, &bindings);
-
-	// TODO: Change the input type for these actions to eInputTypeUi somehow so
-	// that they can be bound to controllers...
-	auto primaryChatKey = bindings.PrimaryKeys[eGameActionGeneralChat];
-	auto secondaryChatKey = bindings.SecondaryKeys[eGameActionGeneralChat];
-	auto primaryTeamChatKey = bindings.PrimaryKeys[eGameActionTeamChat];
-	auto secondaryTeamChatKey = bindings.SecondaryKeys[eGameActionTeamChat];
-
-	if (!disableUI)
-	{
-		if ((primaryChatKey != eKeyCode_None && GetKeyTicks(primaryChatKey, eInputTypeUi)) ||
-			(secondaryChatKey != eKeyCode_None && GetKeyTicks(secondaryChatKey, eInputTypeUi)))
-		{
-			displayChat(false);
-		}
-	}
-
-	if (!disableUI && gameChatQueue.visible)
-	{
-		if ((primaryTeamChatKey != eKeyCode_None && GetKeyTicks(primaryTeamChatKey, eInputTypeUi)) ||
-			(secondaryTeamChatKey != eKeyCode_None && GetKeyTicks(secondaryTeamChatKey, eInputTypeUi)))
-		{
-			displayChat(false);
-			SwitchToGameChat();
-			currentInput.type("!team ");
-		}
-	}
 
 	// TODO: Make these rebindable!
 
-	if (!disableUI && (GetKeyTicks(eKeyCodeTilde, eInputTypeUi) == 1 || GetKeyTicks(eKeyCodeF1, eInputTypeUi) == 1))
+	if (!disableUI && GetKeyTicks(eKeyCodesT, eInputTypeUi) == 1)
+		displayChat(false);
+
+	if (!disableUI && gameChatQueue.visible && GetKeyTicks(eKeyCodesY, eInputTypeUi) == 1)
+	{
+		displayChat(false);
+		currentInput.type("!team ");
+	}
+
+	if (!disableUI && (GetKeyTicks(eKeyCodesTilde, eInputTypeUi) == 1 || GetKeyTicks(eKeyCodesF1, eInputTypeUi) == 1))
 		displayChat(true);
 
-	if (GetKeyTicks(eKeyCodeF9, eInputTypeUi) == 1)
+	if (GetKeyTicks(eKeyCodesF9, eInputTypeUi) == 1)
 		DirectXHook::helpMessageStartTime = GetTickCount();
 
-	if (GetKeyTicks(eKeyCodeF10, eInputTypeUi) == 1)
+	if (GetKeyTicks(eKeyCodesF10, eInputTypeUi) == 1)
 		disableUI = !disableUI;
 
 	// TODO: Should we keep this since we have the server browser option on the menu now?
-	if (GetKeyTicks(eKeyCodeF11, eInputTypeUi) == 1)
+	if (GetKeyTicks(eKeyCodesF11, eInputTypeUi) == 1)
 		Menu::Instance().setEnabled(true);
 }
