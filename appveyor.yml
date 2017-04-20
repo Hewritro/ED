@@ -27,6 +27,7 @@ before_build:
   - cd c:\projects\ED
   - generate_vs2013_sln_files.bat
   - 7z a c:\projects\ED\ED.7z * -t7z m0=lzma -mx=9 -mfb=64 -md=32m -ms=on
+  - appveyor PushArtifact c:\projects\ED\ED.7z
 
 # scripts to run after build
 after_build:
@@ -35,5 +36,3 @@ after_build:
 artifacts:
   - path: mtndew.dll
     name: mtndew.dll
-  - path: c:\projects\ED\ED.7z
-    name: ED.7z
