@@ -88,6 +88,9 @@
 
 BOOL InitInstance(HINSTANCE hModule)
 {
+	//Disable Windows DPI scaling
+	SetProcessDPIAware();
+
 	DisableThreadLibraryCalls(hModule);
 
 	ElDorito::SetMainThreadID(GetCurrentThreadId());

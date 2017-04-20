@@ -244,7 +244,6 @@
     <ClCompile Include="src\Server\ServerChat.cpp" />
     <ClCompile Include="src\Server\VariableSynchronization.cpp" />
     <ClCompile Include="src\ThirdParty\HttpRequest.cpp" />
-    <ClCompile Include="src\ThirdParty\WebSockets.cpp" />
     <ClCompile Include="src\Utils\AntiSpeedHack.cpp" />
     <ClCompile Include="src\Utils\Assert.cpp" />
     <ClCompile Include="src\Utils\Cryptography.cpp" />
