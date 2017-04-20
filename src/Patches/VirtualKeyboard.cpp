@@ -1,3 +1,5 @@
+#pragma warning( disable : 4996)
+
 #include "VirtualKeyboard.hpp"
 
 #include "../ElDorito.hpp"

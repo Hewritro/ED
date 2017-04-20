@@ -13,13 +13,8 @@ clone_folder: c:\projects\ED
 platform: x86
 configuration: Release
 
-install:
-  - cmd: cinst cmake -version 3.2.3 -y
-  - cmd: cmake --version
-  # by default, all script lines are interpreted as batch
-
 build:
-  project: c:\projects\ED\build\ElDorito.vcxproj      # path to Visual Studio solution or project
+  project: c:\projects\ED\ElDorito.vcxproj      # path to Visual Studio solution or project
 
 # scripts to run before build
 before_build:
@@ -31,7 +26,7 @@ before_build:
 
 # scripts to run after build
 after_build:
-  - cd C:\projects\ED\build\Release\
+  - cd C:\projects\ED\Release\
 
 artifacts:
   - path: mtndew.dll

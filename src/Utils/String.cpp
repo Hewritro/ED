@@ -1,3 +1,5 @@
+#pragma warning( disable : 4267)
+
 #include "String.h"
 
 // STL

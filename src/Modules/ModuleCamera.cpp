@@ -1,3 +1,6 @@
+#pragma warning( disable : 4244)
+#pragma warning( disable : 4305)
+
 #include "ModuleCamera.hpp"
 #include <sstream>
 #include "../ElDorito.hpp"

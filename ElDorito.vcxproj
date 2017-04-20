@@ -1,0 +1,281 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGUID>{CEB6B0D7-70FA-442C-B734-5D3B3396373B}</ProjectGUID>
+    <Keyword>Win32Proj</Keyword>
+    <Platform>Win32</Platform>
+    <ProjectName>ElDorito</ProjectName>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseOfMfc>false</UseOfMfc>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v141</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseOfMfc>false</UseOfMfc>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v141</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>10.0.20506.1</_ProjectFileVersion>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">bin\Debug\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">bin\ElDorito.dir\Debug\</IntDir>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">mtndew</TargetName>
+    <TargetExt Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">.dll</TargetExt>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</LinkIncremental>
+    <GenerateManifest Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</GenerateManifest>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">bin\Release\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">bin\ElDorito.dir\Release\</IntDir>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">mtndew</TargetName>
+    <TargetExt Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">.dll</TargetExt>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</LinkIncremental>
+    <GenerateManifest Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</GenerateManifest>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>C:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\Include;libs\detours\include;libs\openssl-1.0.2c\include;libs\teamspeak\include;libs\libwebsockets\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AssemblerListingLocation>bin/Debug/</AssemblerListingLocation>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <CompileAs>CompileAsCpp</CompileAs>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <ExceptionHandling>SyncCThrow</ExceptionHandling>
+      <InlineFunctionExpansion>Disabled</InlineFunctionExpansion>
+      <Optimization>Disabled</Optimization>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <WarningLevel>Level3</WarningLevel>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;_DEBUG;NOMINMAX;PSAPI_VERSION=1;ElDorito_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <DiagnosticsFormat>Column</DiagnosticsFormat>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;_DEBUG;NOMINMAX;PSAPI_VERSION=1;ElDorito_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>C:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\Include;libs\detours\include;libs\openssl-1.0.2c\include;libs\teamspeak\include;libs\libwebsockets\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Midl>
+      <AdditionalIncludeDirectories>C:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\Include;libs\detours\include;libs\openssl-1.0.2c\include;libs\teamspeak\include;libs\libwebsockets\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+    <Link>
+      <AdditionalOptions> /machine:X86 /debug %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib;d3d9.lib;d3dx9.lib;Version.lib;ws2_32.lib;detours.lib;libeay32MT.lib;ts3client_win32.lib;ts3server_win32.lib;ZLib.lib;libwebsocketswin32.lib;psapi.lib;winmm.lib;winmm.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:/Program Files (x86)/Microsoft DirectX SDK (June 2010)/Lib/x86;C:/Program Files (x86)/Microsoft DirectX SDK (June 2010)/Lib/x86/$(Configuration);libs/detours/lib.X86;libs/detours/lib.X86/$(Configuration);libs/openssl-1.0.2c/lib;libs/openssl-1.0.2c/lib/$(Configuration);libs/teamspeak/lib;libs/teamspeak/lib/$(Configuration);libs/libwebsockets/lib;libs/libwebsockets/lib/$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
+      <ImportLibrary>bin/Debug/mtndew.lib</ImportLibrary>
+      <ModuleDefinitionFile>src/ElDorito.def</ModuleDefinitionFile>
+      <ProgramDataBaseFile>bin/Debug/mtndew.pdb</ProgramDataBaseFile>
+      <SubSystem>Console</SubSystem>
+      <Version>
+      </Version>
+    </Link>
+    <ProjectReference>
+      <LinkLibraryDependencies>false</LinkLibraryDependencies>
+    </ProjectReference>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>C:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\Include;libs\detours\include;libs\openssl-1.0.2c\include;libs\teamspeak\include;libs\libwebsockets\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AssemblerListingLocation>bin/Release/</AssemblerListingLocation>
+      <CompileAs>CompileAsCpp</CompileAs>
+      <ExceptionHandling>SyncCThrow</ExceptionHandling>
+      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
+      <Optimization>MaxSpeed</Optimization>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <WarningLevel>Level3</WarningLevel>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;NOMINMAX;PSAPI_VERSION=1;ElDorito_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+      <DebugInformationFormat>
+      </DebugInformationFormat>
+      <DiagnosticsFormat>Column</DiagnosticsFormat>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;NOMINMAX;PSAPI_VERSION=1;ElDorito_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>C:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\Include;libs\detours\include;libs\openssl-1.0.2c\include;libs\teamspeak\include;libs\libwebsockets\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Midl>
+      <AdditionalIncludeDirectories>C:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\Include;libs\detours\include;libs\openssl-1.0.2c\include;libs\teamspeak\include;libs\libwebsockets\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+    <Link>
+      <AdditionalOptions> /machine:X86 %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib;d3d9.lib;d3dx9.lib;Version.lib;ws2_32.lib;detours.lib;libeay32MT.lib;ts3client_win32.lib;ts3server_win32.lib;ZLib.lib;libwebsocketswin32.lib;psapi.lib;winmm.lib;</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:/Program Files (x86)/Microsoft DirectX SDK (June 2010)//Lib/x86;C:/Program Files (x86)/Microsoft DirectX SDK (June 2010)//Lib/x86/$(Configuration);libs/detours/lib.X86;libs/detours/lib.X86/$(Configuration);libs/openssl-1.0.2c/lib;libs/openssl-1.0.2c/lib/$(Configuration);libs/teamspeak/lib;libs/teamspeak/lib/$(Configuration);libs/libwebsockets/lib;libs/libwebsockets/lib/$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <GenerateDebugInformation>false</GenerateDebugInformation>
+      <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
+      <ImportLibrary>bin/Release/mtndew.lib</ImportLibrary>
+      <ModuleDefinitionFile>src/ElDorito.def</ModuleDefinitionFile>
+      <ProgramDataBaseFile>bin/Release/mtndew.pdb</ProgramDataBaseFile>
+      <SubSystem>Console</SubSystem>
+      <Version>
+      </Version>
+    </Link>
+    <ProjectReference>
+      <LinkLibraryDependencies>false</LinkLibraryDependencies>
+    </ProjectReference>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClInclude Include="src\Blam\BitStream.hpp" />
+    <ClInclude Include="src\Blam\BlamInput.hpp" />
+    <ClInclude Include="src\Blam\BlamNetwork.hpp" />
+    <ClInclude Include="src\Blam\BlamTypes.hpp" />
+    <ClInclude Include="src\Blam\Tags\Tags.hpp" />
+    <ClInclude Include="src\Blam\Tags\GameEngineSettingsDefinition.hpp" />
+    <ClInclude Include="src\Blam\Tags\Scenario.hpp" />
+    <ClInclude Include="src\DirectXHook.hpp" />
+    <ClInclude Include="src\Console\GameConsole.hpp" />
+    <ClInclude Include="src\Console\Queue.hpp" />
+    <ClInclude Include="src\Modules\ModuleBase.hpp" />
+    <ClInclude Include="src\Modules\ModuleCamera.hpp" />
+    <ClInclude Include="src\Modules\ModuleGame.hpp" />
+    <ClInclude Include="src\Modules\ModuleInput.hpp" />
+    <ClInclude Include="src\Modules\ModulePlayer.hpp" />
+    <ClInclude Include="src\Modules\ModuleServer.hpp" />
+    <ClInclude Include="src\Modules\ModuleSettings.hpp" />
+    <ClInclude Include="src\Modules\ModuleVoIP.hpp" />
+    <ClInclude Include="src\Modules\ModuleTime.hpp" />
+    <ClInclude Include="src\Modules\ModuleGraphics.hpp" />
+    <ClInclude Include="src\Patches\Armor.hpp" />
+    <ClInclude Include="src\Patches\Assassination.hpp" />
+    <ClInclude Include="src\Patches\ContentItems.hpp" />
+    <ClInclude Include="src\Patches\CustomPackets.hpp" />
+    <ClInclude Include="src\Patches\Core.hpp" />
+    <ClInclude Include="src\Patches\Forge.hpp" />
+    <ClInclude Include="src\Patches\Input.hpp" />
+    <ClInclude Include="src\Patches\Logging.hpp" />
+    <ClInclude Include="src\Patches\Mouse.hpp" />
+    <ClInclude Include="src\Patches\Network.hpp" />
+    <ClInclude Include="src\Patches\PlayerPropertiesExtension.hpp" />
+    <ClInclude Include="src\Patches\PlayerUid.hpp" />
+    <ClInclude Include="src\Patches\RawInput.hpp" />
+    <ClInclude Include="src\Patches\Scoreboard.hpp" />
+    <ClInclude Include="src\Patches\Sprint.hpp" />
+    <ClInclude Include="src\Patches\Ui.hpp" />
+    <ClInclude Include="src\Patches\VirtualKeyboard.hpp" />
+    <ClInclude Include="src\Server\BanList.hpp" />
+    <ClInclude Include="src\Server\ServerChat.hpp" />
+    <ClInclude Include="src\Server\VariableSynchronization.hpp" />
+    <ClInclude Include="src\ThirdParty\dirent.h" />
+    <ClInclude Include="src\ThirdParty\HttpRequest.hpp" />
+    <ClInclude Include="src\ThirdParty\WebSockets.hpp" />
+    <ClInclude Include="src\Utils\AntiSpeedHack.hpp" />
+    <ClInclude Include="src\Utils\Assert.hpp" />
+    <ClInclude Include="src\Utils\Bits.hpp" />
+    <ClInclude Include="src\Utils\Cryptography.hpp" />
+    <ClInclude Include="src\Utils\DebugLog.hpp" />
+    <ClInclude Include="src\Utils\Macros.hpp" />
+    <ClInclude Include="src\Utils\Singleton.hpp" />
+    <ClInclude Include="src\Utils\String.hpp" />
+    <ClInclude Include="src\Utils\Utils.hpp" />
+    <ClInclude Include="src\Utils\VersionInfo.hpp" />
+    <ClInclude Include="src\VoIP\MemberList.hpp" />
+    <ClInclude Include="src\VoIP\TeamspeakClient.hpp" />
+    <ClInclude Include="src\VoIP\TeamspeakServer.hpp" />
+    <ClInclude Include="src\Menu.hpp" />
+    <ClInclude Include="src\Settings.hpp" />
+    <ClInclude Include="src\CommandMap.hpp" />
+    <ClInclude Include="src\ElDorito.hpp" />
+    <ClInclude Include="src\ElModules.hpp" />
+    <ClInclude Include="src\ElPatches.hpp" />
+    <ClInclude Include="src\Patch.hpp" />
+    <ClInclude Include="src\Pointer.hpp" />
+    <ClInclude Include="src\resource.h" />
+    <ClCompile Include="src\Blam\BitStream.cpp" />
+    <ClCompile Include="src\Blam\BlamInput.cpp" />
+    <ClCompile Include="src\Blam\BlamNetwork.cpp" />
+    <ClCompile Include="src\DirectXHook.cpp" />
+    <ClCompile Include="src\Console\GameConsole.cpp" />
+    <ClCompile Include="src\Console\Queue.cpp" />
+    <ClCompile Include="src\Modules\ModuleBase.cpp" />
+    <ClCompile Include="src\Modules\ModuleCamera.cpp" />
+    <ClCompile Include="src\Modules\ModuleGame.cpp" />
+    <ClCompile Include="src\Modules\ModuleInput.cpp" />
+    <ClCompile Include="src\Modules\ModulePlayer.cpp" />
+    <ClCompile Include="src\Modules\ModuleServer.cpp" />
+    <ClCompile Include="src\Modules\ModuleSettings.cpp" />
+    <ClCompile Include="src\Modules\ModuleVoIP.cpp" />
+    <ClCompile Include="src\Modules\ModuleTime.cpp" />
+    <ClCompile Include="src\Modules\ModuleGraphics.cpp" />
+    <ClCompile Include="src\Patches\Armor.cpp" />
+    <ClCompile Include="src\Patches\Assassination.cpp" />
+    <ClCompile Include="src\Patches\ContentItems.cpp" />
+    <ClCompile Include="src\Patches\CustomPackets.cpp" />
+    <ClCompile Include="src\Patches\Core.cpp" />
+    <ClCompile Include="src\Patches\Forge.cpp" />
+    <ClCompile Include="src\Patches\Input.cpp" />
+    <ClCompile Include="src\Patches\Logging.cpp" />
+    <ClCompile Include="src\Patches\Mouse.cpp" />
+    <ClCompile Include="src\Patches\Network.cpp" />
+    <ClCompile Include="src\Patches\PlayerPropertiesExtension.cpp" />
+    <ClCompile Include="src\Patches\PlayerUid.cpp" />
+    <ClCompile Include="src\Patches\RawInputPatch.cpp" />
+    <ClCompile Include="src\Patches\Scoreboard.cpp" />
+    <ClCompile Include="src\Patches\Sprint.cpp" />
+    <ClCompile Include="src\Patches\Ui.cpp" />
+    <ClCompile Include="src\Patches\VirtualKeyboard.cpp" />
+    <ClCompile Include="src\Server\BanList.cpp" />
+    <ClCompile Include="src\Server\ServerChat.cpp" />
+    <ClCompile Include="src\Server\VariableSynchronization.cpp" />
+    <ClCompile Include="src\ThirdParty\HttpRequest.cpp" />
+    <ClCompile Include="src\ThirdParty\WebSockets.cpp" />
+    <ClCompile Include="src\Utils\AntiSpeedHack.cpp" />
+    <ClCompile Include="src\Utils\Assert.cpp" />
+    <ClCompile Include="src\Utils\Cryptography.cpp" />
+    <ClCompile Include="src\Utils\DebugLog.cpp" />
+    <ClCompile Include="src\Utils\String.cpp" />
+    <ClCompile Include="src\Utils\VersionInfo.cpp" />
+    <ClCompile Include="src\VoIP\MemberList.cpp" />
+    <ClCompile Include="src\VoIP\TeamspeakClient.cpp" />
+    <ClCompile Include="src\VoIP\TeamspeakServer.cpp" />
+    <ClCompile Include="src\Menu.cpp" />
+    <ClCompile Include="src\CommandMap.cpp" />
+    <ClCompile Include="src\ElDorito.cpp">
+      <ObjectFileName>$(IntDir)/src/ElDorito.cpp.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="src\ElModules.cpp" />
+    <ClCompile Include="src\ElPatches.cpp" />
+    <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\Patch.cpp" />
+    <ClCompile Include="src\Pointer.cpp" />
+    <ResourceCompile Include="src\ElDorito.rc">
+      <ObjectFileName>$(IntDir)/src/ElDorito.rc.res</ObjectFileName>
+    </ResourceCompile>
+    <ResourceCompile Include="src\ForgeSavingDialog.rc" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
