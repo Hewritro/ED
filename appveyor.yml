@@ -22,7 +22,7 @@ before_build:
 
 # scripts to run after build
 after_build:
-  - cd C:\projects\ED\Release\
+  - cd C:\projects\ED\bin\Release\
 
 artifacts:
   - path: mtndew.dll
