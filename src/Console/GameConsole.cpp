@@ -135,9 +135,7 @@ void GameConsole::displayChat(bool console)
 	if (console)
 	{
 		if (selectedQueue != &consoleQueue)
-		{
 			lastChatQueue = selectedQueue;
-		}
 		selectedQueue = &consoleQueue;
 		showConsole = true;
 	}
@@ -195,56 +193,40 @@ bool GameConsole::keyDownCallBack(const Blam::Input::KeyEvent& key)
 
 	case KeyCodes::eKeyCodesBack:
 		if (!currentInput.currentInput.empty())
-		{
 			currentInput.backspace();
-		}
 		break;
 
 	case KeyCodes::eKeyCodesDelete:
 		if (!currentInput.currentInput.empty())
-		{
 			currentInput.del();
-		}
 		break;
   
 	case KeyCodes::eKeyCodesHome:
 		if (!currentInput.currentInput.empty())
-		{
 			currentInput.home();
-		}
 		break;
 
 	case KeyCodes::eKeyCodesEnd:
 		if (!currentInput.currentInput.empty())
-		{
 			currentInput.end();
-		}
 		break;
 
 	case KeyCodes::eKeyCodesPageUp:
 		if (selectedQueue->startIndexForScrolling < selectedQueue->numOfLinesBuffer - selectedQueue->numOfLinesToShow)
-		{
 			selectedQueue->startIndexForScrolling++;
-		}
 		break;
 
 	case KeyCodes::eKeyCodesPageDown:
 		if (selectedQueue->startIndexForScrolling > 0)
-		{
 			selectedQueue->startIndexForScrolling--;
-		}
 		break;
 
 	case KeyCodes::eKeyCodesUp:
 		currentBacklogIndex++;
 		if (currentBacklogIndex > (int)selectedQueue->unchangingBacklog.size() - 1)
-		{
 			currentBacklogIndex--;
-		}
 		if (currentBacklogIndex >= 0)
-		{
 			currentInput.currentInput = selectedQueue->unchangingBacklog.at(selectedQueue->unchangingBacklog.size() - currentBacklogIndex - 1);
-		}
 		break;
 
 	case KeyCodes::eKeyCodesDown:
@@ -255,9 +237,7 @@ bool GameConsole::keyDownCallBack(const Blam::Input::KeyEvent& key)
 			currentInput.currentInput = "";
 		}
 		else
-		{
 			currentInput.currentInput = selectedQueue->unchangingBacklog.at(selectedQueue->unchangingBacklog.size() - currentBacklogIndex - 1);
-		}
 		break;
 
 	case KeyCodes::eKeyCodesLeft:
@@ -272,12 +252,8 @@ bool GameConsole::keyDownCallBack(const Blam::Input::KeyEvent& key)
 		if (currentInput.currentInput.find_first_of(" ") == std::string::npos && currentInput.currentInput.length() > 0)
 		{
 			if (tabHitLast)
-			{
 				if (currentCommandList.size() > 0)
-				{
 					currentInput.set(currentCommandList.at((++tryCount) % currentCommandList.size()));
-				}
-			}
 			else
 			{
 				tryCount = 0;
@@ -293,9 +269,7 @@ bool GameConsole::keyDownCallBack(const Blam::Input::KeyEvent& key)
 					std::transform(commandName.begin(), commandName.end(), commandName.begin(), ::tolower);
 
 					if (commandName.compare(0, currentLine.length(), currentLine) == 0)
-					{
 						currentCommandList.push_back(commandName);
-					}
 				}
 				consoleQueue.pushLineFromGameToUI(std::to_string(currentCommandList.size()) + " commands found starting with \"" + currentLine + ".\"");
 				consoleQueue.pushLineFromGameToUI("Press tab to go through them.");
