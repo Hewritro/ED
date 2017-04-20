@@ -19,6 +19,7 @@ build:
 # scripts to run after build
 after_build:
   - cd C:\projects\ED\bin\Release\
+  - copy /y mtndew.dll ..\..\mtndew.dll
 
 artifacts:
   - path: mtndew.dll
