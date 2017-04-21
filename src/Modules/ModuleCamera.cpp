@@ -23,7 +23,7 @@ namespace
 	bool __stdcall IsCameraDefinitionEditable(CameraDefinitionType definition)
 	{
 		auto mode = Utils::String::ToLower(Modules::ModuleCamera::Instance().VarCameraMode->ValueString);
-		if (!mode.compare("first") || !mode.compare("third"))
+		if (!mode.compare("first") || !mode.compare("third") || !mode.compare("dead"))
 		{
 			if (definition == CameraDefinitionType::PositionShift ||
 				definition == CameraDefinitionType::LookShift ||
