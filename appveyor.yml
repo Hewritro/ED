@@ -33,7 +33,6 @@ deploy:
     auth_token:
       secure: NtgoY7/UXsMaWp1KTWAsCp6dc9kq6ryIajWs4A4uY+7+Q7xVfQiAnXRiba5wGOaQ
     artifact: mtndew.dll
-    draft: true
+    draft: false
     prerelease: true
     force_update: true
-    
