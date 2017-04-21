@@ -207,7 +207,8 @@ target_link_libraries(ElDorito
   libeay32MT
   ZLib
   libwebsocketswin32
-  psapi)
+  psapi
+  winmm)
 
 target_compile_definitions(ElDorito PRIVATE NOMINMAX) # Prevent windows.h from defining min() and max()
 target_compile_definitions(ElDorito PRIVATE PSAPI_VERSION=1)
