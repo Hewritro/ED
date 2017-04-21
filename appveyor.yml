@@ -20,16 +20,3 @@ after_build:
 artifacts:
   - path: mtndew.dll
     name: mtndew.dll
-
-deploy:
-  provider: GitHub
-  tag: 0
-  release: v0
-  description: ''
-  auth_token:
-    secure: NtgoY7/UXsMaWp1KTWAsCp6dc9kq6ryIajWs4A4uY+7+Q7xVfQiAnXRiba5wGOaQ
-  artifact: mtndew.dll
-  draft: false
-  prerelease: true
-  on:
-    appveyor_repo_tag: true
