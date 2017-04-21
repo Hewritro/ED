@@ -23,8 +23,12 @@ artifacts:
 
 deploy:
 - provider: GitHub
+  tag: 0
+  release: v0.0
   auth_token:
     secure: NtgoY7/UXsMaWp1KTWAsCp6dc9kq6ryIajWs4A4uY+7+Q7xVfQiAnXRiba5wGOaQ
   artifact: mtndew.dll
   prerelease: true
   force_update: true
+  on:
+    appveyor_repo_tag: true
