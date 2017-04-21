@@ -269,10 +269,18 @@ namespace
 			directorGlobalsPtr(0x850).Write(0.0f);			// vertical look shift
 			directorGlobalsPtr(0x854).Write(0.0f);			// depth
 		}
+		else if (!mode.compare("dead")) // c_dead_camera
+		{
+			offset = 0x16725DC;
+			directorGlobalsPtr(0x840).Write(0.0f);			// x camera shift
+			directorGlobalsPtr(0x844).Write(0.0f);			// y camera shift
+			directorGlobalsPtr(0x848).Write(0.0f);			// z camera shift
+			directorGlobalsPtr(0x84C).Write(0.0f);			// horizontal look shift
+			directorGlobalsPtr(0x850).Write(0.0f);			// vertical look shift
+			directorGlobalsPtr(0x854).Write(0.0f);			// depth
+		}
 
 		/*
-		else if (!mode.compare("dead")) // c_dead_camera
-			offset = 0x16725DC;
 		else if (!mode.compare("scripted")) // c_scripted_camera
 			offset = 0x167280C;
 		else if (!mode.compare("pancam1")) // c_director

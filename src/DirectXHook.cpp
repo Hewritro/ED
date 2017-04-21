@@ -43,18 +43,14 @@ int DirectXHook::getTextWidth(const char *szText, LPD3DXFONT pFont)
 {
 	RECT rcRect = { 0, 0, 0, 0 };
 	if (pFont)
-	{
 		pFont->DrawText(NULL, szText, strlen(szText), &rcRect, DT_CALCRECT, D3DCOLOR_XRGB(0, 0, 0));
-	}
 	int width = rcRect.right - rcRect.left;
 	std::string text(szText);
 	std::reverse(text.begin(), text.end());
 
 	text = text.substr(0, text.find_first_not_of(' ') != std::string::npos ? text.find_first_not_of(' ') : 0);
 	for(char c : text)
-	{
 		width += getSpaceCharacterWidth(pFont);
-	}
 	return width;
 }
 
@@ -98,7 +94,7 @@ void DirectXHook::drawHelpMessage()
 		y += verticalSpacingBetweenEachLine;
 		drawText(x, y, COLOR_WHITE, "2. If the game is too bright, reset your NVidia control panel settings.", largeSizeFont);
 		y += verticalSpacingBetweenEachLine;
-		drawText(x, y, COLOR_WHITE, "3. If server browser doesn't work, go to http://eldewrito.github.io/menu/, open the console (F1 key or ` key) and type: connect <ip address>", largeSizeFont);
+		drawText(x, y, COLOR_WHITE, "3. If server browser doesn't work, go to http://vicelio.github.io/menu/, open the console (F1 key or ` key) and type: connect <ip address>", largeSizeFont);
 		y += verticalSpacingBetweenEachLine;
 	}
 }
@@ -107,9 +103,7 @@ void DirectXHook::drawChatInterface()
 {
 	auto& console = GameConsole::Instance();
 	if ((console.getMsSinceLastConsoleOpen() > 10000 && !console.showChat && !console.showConsole) || (GetAsyncKeyState(VK_TAB) & 0x8000 && !console.showChat && !console.showConsole))
-	{
 		return;
-	}
 
 	int x = (int)(0.05 * *horizontalRes);
 	int y = (int)(0.65 * *verticalRes);
@@ -153,9 +147,7 @@ void DirectXHook::drawChatInterface()
 				width = getTextWidth(currentInput.substr(0, console.currentInput.currentPointerIndex).c_str(), normalSizeFont) - 3;
 			}
 			else
-			{
 				width = -3;
-			}
 			drawText(x + horizontalSpacing + width, y + verticalSpacingBetweenTopOfInputBoxAndFont, COLOR_WHITE, "|", normalSizeFont);
 		}
 		// END: Line showing where the user currently is in the input field.
@@ -173,9 +165,7 @@ void DirectXHook::drawChatInterface()
 			std::vector<std::string> linesWrapped = std::vector < std::string > {};
 
 			for (size_t i = 0; i < line.size(); i += maxCharsPerLine)
-			{
 				linesWrapped.push_back(line.substr(i, maxCharsPerLine));
-			}
 
 			for (int i = linesWrapped.size() - 1; i >= 0; i--)
 			{
@@ -206,9 +196,7 @@ void DirectXHook::hookDirectX()
 	DetourAttach((PVOID*)&origEndScenePtr, &DirectXHook::hookedEndScene); // redirect origEndScenePtr to newEndScene
 
 	if (DetourTransactionCommit() != NO_ERROR)
-	{
 		OutputDebugString("DirectX EndScene hook failed.");
-	}
 
 	DetourRestoreAfterWith();
 	DetourTransactionBegin();
@@ -216,9 +204,7 @@ void DirectXHook::hookDirectX()
 	DetourAttach((PVOID*)&origDrawIndexedPrimitivePtr, &DirectXHook::hookedDrawIndexedPrimitive); // redirect DrawIndexedPrimitive to newDrawIndexedPrimitive
 
 	if (DetourTransactionCommit() != NO_ERROR)
-	{
 		OutputDebugString("DirectX DrawIndexedPrimitive hook failed.");
-	}
 }
 
 void DirectXHook::drawText(int x, int y, DWORD color, const char* text, LPD3DXFONT pFont)
@@ -278,9 +264,7 @@ void DirectXHook::initFontsIfRequired()
 
 	if (!normalSizeFont || normalSizeFontHeight != normalSizeCurrentFontHeight) {
 		if (normalSizeFont)
-		{
 			normalSizeFont->Release();
-		}
 
 		D3DXCreateFont(pDevice, normalSizeFontHeight, 0, FW_NORMAL, 1, 0, DEFAULT_CHARSET, OUT_DEFAULT_PRECIS, ANTIALIASED_QUALITY, DEFAULT_PITCH | FF_DONTCARE, "Verdana", &normalSizeFont);
 		normalSizeCurrentFontHeight = normalSizeFontHeight;
@@ -288,9 +272,7 @@ void DirectXHook::initFontsIfRequired()
 
 	if (!largeSizeFont || largeSizeFontHeight != largeSizeCurrentFontHeight) {
 		if (largeSizeFont)
-		{
 			largeSizeFont->Release();
-		}
 
 		D3DXCreateFont(pDevice, largeSizeFontHeight, 0, FW_NORMAL, 1, 0, DEFAULT_CHARSET, OUT_DEFAULT_PRECIS, ANTIALIASED_QUALITY, DEFAULT_PITCH | FF_DONTCARE, "Tahoma", &largeSizeFont);
 		largeSizeCurrentFontHeight = largeSizeFontHeight;
