@@ -8,14 +8,17 @@
 
 Queue::Queue(D3DCOLOR color) : color(color)
 {
-	for (int i = 0; i < numOfLinesBuffer; i++)
+	for (int i = 0; i < numOfLinesBuffer; i++) {
 		queue.push_back("");
+	}
 }
 
 void Queue::pushLineFromGameToUI(std::string line)
 {
 	for (int i = numOfLinesBuffer - 1; i > 0; i--)
+	{
 		queue.at(i) = queue.at(i - 1);
+	}
 	queue.at(0) = line;
 
 	lastTimeQueueShown = GetTickCount();
@@ -62,7 +65,9 @@ void ConsoleQueue::pushLineFromGameToUIMultipleLines(std::string multipleLines)
 	split(multipleLines, '\n', linesVector);
 
 	for (std::string line : linesVector)
+	{
 		pushLineFromGameToUI(line);
+	}
 }
 
 void ConsoleQueue::pushLineFromKeyboardToGame(std::string line)

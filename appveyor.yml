@@ -16,10 +16,15 @@ platform: x86
 configuration: Release
 
 build:
-  project: c:\projects\ED\ElDorito.vcxproj
+  project: c:\projects\ED\build\ElDorito.vcxproj
+
+
+before_build:
+  - cd c:\projects\ED
+  - generate_vs2013_sln_files.bat
 
 after_build:
-  - cd C:\projects\ED\bin\Release\
+  - cd C:\projects\ED\build\Release\
   - copy /y mtndew.dll ..\..\mtndew.dll
 
 artifacts:

@@ -135,7 +135,9 @@ void GameConsole::displayChat(bool console)
 	if (console)
 	{
 		if (selectedQueue != &consoleQueue)
+		{
 			lastChatQueue = selectedQueue;
+		}
 		selectedQueue = &consoleQueue;
 		showConsole = true;
 	}
@@ -158,14 +160,14 @@ bool GameConsole::consoleKeyCallBack()
 	{
 		switch (event.Type)
 		{
-			case Blam::Input::eKeyEventTypeDown:
-				if (!keyDownCallBack(event))
-					return false;
-				break;
-			case Blam::Input::eKeyEventTypeChar:
-				if (!keyTypedCallBack(event))
-					return false;
-				break;
+		case Blam::Input::eKeyEventTypeDown:
+			if (!keyDownCallBack(event))
+				return false;
+			break;
+		case Blam::Input::eKeyEventTypeChar:
+			if (!keyTypedCallBack(event))
+				return false;
+			break;
 		}
 	}
 	return true;
@@ -177,116 +179,138 @@ bool GameConsole::keyDownCallBack(const Blam::Input::KeyEvent& key)
 
 	switch (key.Code)
 	{
-		case KeyCodes::eKeyCodesEnter:
-			if (!currentInput.currentInput.empty())
-			{
-				selectedQueue->unchangingBacklog.push_back(currentInput.currentInput);
-				selectedQueue->pushLineFromKeyboardToGame(currentInput.currentInput);
-				selectedQueue->startIndexForScrolling = 0;
-			}
-			hideConsole();
-			return false;
+	case KeyCodes::eKeyCodesEnter:
+		if (!currentInput.currentInput.empty())
+		{
+			selectedQueue->unchangingBacklog.push_back(currentInput.currentInput);
+			selectedQueue->pushLineFromKeyboardToGame(currentInput.currentInput);
+			selectedQueue->startIndexForScrolling = 0;
+		}
+		hideConsole();
+		return false;
 
-		case KeyCodes::eKeyCodesEscape:
-			hideConsole();
-			return false;
+	case KeyCodes::eKeyCodesEscape:
+		hideConsole();
+		return false;
 
-		case KeyCodes::eKeyCodesBack:
-			if (!currentInput.currentInput.empty())
-				currentInput.backspace();
-			break;
+	case KeyCodes::eKeyCodesBack:
+		if (!currentInput.currentInput.empty())
+		{
+			currentInput.backspace();
+		}
+		break;
 
-		case KeyCodes::eKeyCodesDelete:
-			if (!currentInput.currentInput.empty())
-				currentInput.del();
-			break;
+	case KeyCodes::eKeyCodesDelete:
+		if (!currentInput.currentInput.empty())
+		{
+			currentInput.del();
+		}
+		break;
 
-		case KeyCodes::eKeyCodesPageUp:
-			if (selectedQueue->startIndexForScrolling < selectedQueue->numOfLinesBuffer - selectedQueue->numOfLinesToShow)
-				selectedQueue->startIndexForScrolling++;
-			break;
+	case KeyCodes::eKeyCodesPageUp:
+		if (selectedQueue->startIndexForScrolling < selectedQueue->numOfLinesBuffer - selectedQueue->numOfLinesToShow)
+		{
+			selectedQueue->startIndexForScrolling++;
+		}
+		break;
 
-		case KeyCodes::eKeyCodesPageDown:
-			if (selectedQueue->startIndexForScrolling > 0)
-				selectedQueue->startIndexForScrolling--;
-			break;
+	case KeyCodes::eKeyCodesPageDown:
+		if (selectedQueue->startIndexForScrolling > 0)
+		{
+			selectedQueue->startIndexForScrolling--;
+		}
+		break;
 
-		case KeyCodes::eKeyCodesUp:
-			currentBacklogIndex++;
-			if (currentBacklogIndex > (int)selectedQueue->unchangingBacklog.size() - 1)
-				currentBacklogIndex--;
-			if (currentBacklogIndex >= 0)
-				currentInput.currentInput = selectedQueue->unchangingBacklog.at(selectedQueue->unchangingBacklog.size() - currentBacklogIndex - 1);
-			break;
-
-		case KeyCodes::eKeyCodesDown:
+	case KeyCodes::eKeyCodesUp:
+		currentBacklogIndex++;
+		if (currentBacklogIndex > (int)selectedQueue->unchangingBacklog.size() - 1)
+		{
 			currentBacklogIndex--;
-			if (currentBacklogIndex < 0)
+		}
+		if (currentBacklogIndex >= 0)
+		{
+			currentInput.currentInput = selectedQueue->unchangingBacklog.at(selectedQueue->unchangingBacklog.size() - currentBacklogIndex - 1);
+		}
+		break;
+
+	case KeyCodes::eKeyCodesDown:
+		currentBacklogIndex--;
+		if (currentBacklogIndex < 0)
+		{
+			currentBacklogIndex = -1;
+			currentInput.currentInput = "";
+		}
+		else
+		{
+			currentInput.currentInput = selectedQueue->unchangingBacklog.at(selectedQueue->unchangingBacklog.size() - currentBacklogIndex - 1);
+		}
+		break;
+
+	case KeyCodes::eKeyCodesLeft:
+		currentInput.left();
+		break;
+
+	case KeyCodes::eKeyCodesRight:
+		currentInput.right();
+		break;
+
+	case KeyCodes::eKeyCodesTab:
+		if (currentInput.currentInput.find_first_of(" ") == std::string::npos && currentInput.currentInput.length() > 0)
+		{
+			if (tabHitLast)
 			{
-				currentBacklogIndex = -1;
-				currentInput.currentInput = "";
+				if (currentCommandList.size() > 0)
+				{
+					currentInput.set(currentCommandList.at((++tryCount) % currentCommandList.size()));
+				}
 			}
 			else
-				currentInput.currentInput = selectedQueue->unchangingBacklog.at(selectedQueue->unchangingBacklog.size() - currentBacklogIndex - 1);
-			break;
-
-		case KeyCodes::eKeyCodesLeft:
-			currentInput.left();
-			break;
-
-		case KeyCodes::eKeyCodesRight:
-			currentInput.right();
-			break;
-
-		case KeyCodes::eKeyCodesTab:
-			if (currentInput.currentInput.find_first_of(" ") == std::string::npos && currentInput.currentInput.length() > 0)
-				if (tabHitLast)
-					if (currentCommandList.size() > 0)
-						currentInput.set(currentCommandList.at((++tryCount) % currentCommandList.size()));
-				else
-				{
-					tryCount = 0;
-					currentCommandList.clear();
-					commandPriorComplete = currentInput.currentInput;
-
-					auto currentLine = currentInput.currentInput;
-					std::transform(currentLine.begin(), currentLine.end(), currentLine.begin(), ::tolower);
-
-					for (auto cmd : Modules::CommandMap::Instance().Commands)
-					{
-						auto commandName = cmd.Name;
-						std::transform(commandName.begin(), commandName.end(), commandName.begin(), ::tolower);
-
-						if (commandName.compare(0, currentLine.length(), currentLine) == 0)
-							currentCommandList.push_back(commandName);
-					}
-					consoleQueue.pushLineFromGameToUI(std::to_string(currentCommandList.size()) + " commands found starting with \"" + currentLine + ".\"");
-					consoleQueue.pushLineFromGameToUI("Press tab to go through them.");
-			}
-			break;
-
-		case KeyCodes::eKeyCodesV:
-			if (!(key.Modifiers & Blam::Input::eKeyEventModifiersCtrl)) // CTRL+V pasting
-				break;
-			if (!OpenClipboard(nullptr))
-				break;
-			auto hData = GetClipboardData(CF_TEXT);
-			if (hData)
 			{
-				auto textPointer = static_cast<char*>(GlobalLock(hData));
-				for (size_t i = 0; textPointer[i]; i++)
+				tryCount = 0;
+				currentCommandList.clear();
+				commandPriorComplete = currentInput.currentInput;
+
+				auto currentLine = currentInput.currentInput;
+				std::transform(currentLine.begin(), currentLine.end(), currentLine.begin(), ::tolower);
+
+				for (auto cmd : Modules::CommandMap::Instance().Commands)
 				{
-					auto ch = textPointer[i];
-					if (ch == '\r' || ch == '\n' || ch == '\t')
-						continue;
-					if (currentInput.currentInput.size() >= INPUT_MAX_CHARS)
-						break;
-					currentInput.type(ch);
+					auto commandName = cmd.Name;
+					std::transform(commandName.begin(), commandName.end(), commandName.begin(), ::tolower);
+
+					if (commandName.compare(0, currentLine.length(), currentLine) == 0)
+					{
+						currentCommandList.push_back(commandName);
+					}
 				}
-				GlobalUnlock(hData);
+				consoleQueue.pushLineFromGameToUI(std::to_string(currentCommandList.size()) + " commands found starting with \"" + currentLine + ".\"");
+				consoleQueue.pushLineFromGameToUI("Press tab to go through them.");
 			}
-			CloseClipboard();
+		}
+		break;
+
+	case KeyCodes::eKeyCodesV:
+		if (!(key.Modifiers & Blam::Input::eKeyEventModifiersCtrl)) // CTRL+V pasting
 			break;
+		if (!OpenClipboard(nullptr))
+			break;
+		auto hData = GetClipboardData(CF_TEXT);
+		if (hData)
+		{
+			auto textPointer = static_cast<char*>(GlobalLock(hData));
+			for (size_t i = 0; textPointer[i]; i++)
+			{
+				auto ch = textPointer[i];
+				if (ch == '\r' || ch == '\n' || ch == '\t')
+					continue;
+				if (currentInput.currentInput.size() >= INPUT_MAX_CHARS)
+					break;
+				currentInput.type(ch);
+			}
+			GlobalUnlock(hData);
+		}
+		CloseClipboard();
+		break;
 	}
 	tabHitLast = (key.Code == KeyCodes::eKeyCodesTab);
 	return true;
@@ -303,12 +327,22 @@ bool GameConsole::keyTypedCallBack(const Blam::Input::KeyEvent& key)
 void GameConsole::mouseCallBack(RAWMOUSE mouseInfo)
 {
 	if (mouseInfo.usButtonFlags == RI_MOUSE_WHEEL)
+	{
 		if ((short) mouseInfo.usButtonData > 0)
+		{
 			if (selectedQueue->startIndexForScrolling < selectedQueue->numOfLinesBuffer - selectedQueue->numOfLinesToShow)
+			{
 				selectedQueue->startIndexForScrolling++;
+			}
+		}
 		else
+		{
 			if (selectedQueue->startIndexForScrolling > 0)
+			{
 				selectedQueue->startIndexForScrolling--;
+			}
+		}
+	}
 }
 
 void GameConsole::gameInputCallBack()
