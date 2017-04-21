@@ -222,8 +222,10 @@ bool GameConsole::keyDownCallBack(const Blam::Input::KeyEvent& key)
 		case KeyCodes::eKeyCodesDown:
 			currentBacklogIndex--;
 			if (currentBacklogIndex < 0)
+			{
 				currentBacklogIndex = -1;
 				currentInput.currentInput = "";
+			}
 			else
 				currentInput.currentInput = selectedQueue->unchangingBacklog.at(selectedQueue->unchangingBacklog.size() - currentBacklogIndex - 1);
 			break;
