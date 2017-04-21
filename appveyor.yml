@@ -1,5 +1,9 @@
 version: 0.{build}
 
+skip_tags: true
+
+skip_branch_with_pr: true
+
 os: Windows Server 2012 R2
 
 init:
@@ -22,13 +26,21 @@ artifacts:
     name: mtndew.dll
 
 deploy:
-- provider: GitHub
-  tag: 0
-  release: v0.0
-  auth_token:
-    secure: NtgoY7/UXsMaWp1KTWAsCp6dc9kq6ryIajWs4A4uY+7+Q7xVfQiAnXRiba5wGOaQ
-  artifact: mtndew.dll
-  prerelease: true
-  force_update: true
-  on:
-    appveyor_repo_tag: true
+  - provider: GitHub
+    tag: 0
+    release: v0.{build}
+    auth_token:
+      secure: NtgoY7/UXsMaWp1KTWAsCp6dc9kq6ryIajWs4A4uY+7+Q7xVfQiAnXRiba5wGOaQ
+    artifact: mtndew.dll
+    draft: true
+    prerelease: true
+    force_update: true
+
+notifications:
+  - provider: Webhook
+    url: 
+      secure: J9/ytFq45v8CySuImAyD49rwkimnPu8NZnAqaKE+9D3xkcs7Vv28k8DR/hoCXmxnM/UKDRnVg8Yj7v6HlET0AvHtsVbJ+MhtFsGlNmVYVbBPZLRy6EDS28spVmE8ZLUsW45OOPR3IrwyHlWP4paOezV6zHA9T8yFuIq2/bJcGA8=
+    method: POST
+    on_build_success: true
+    on_build_failure: false
+    on_build_status_changed: false
