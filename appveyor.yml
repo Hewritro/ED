@@ -4,6 +4,11 @@ skip_tags: true
 
 skip_branch_with_pr: true
 
+environment:
+  discord:
+    secure: J9/ytFq45v8CySuImAyD49rwkimnPu8NZnAqaKE+9D3xkcs7Vv28k8DR/hoCXmxnM/UKDRnVg8Yj7v6HlET0AvHtsVbJ+MhtFsGlNmVYVbBPZLRy6EDS28spVmE8ZLUsW45OOPR3IrwyHlWP4paOezV6zHA9T8yFuIq2/bJcGA8=
+
+
 os: Windows Server 2012 R2
 
 init:
@@ -38,8 +43,7 @@ deploy:
 
 notifications:
   - provider: Webhook
-    url: 
-      secure: J9/ytFq45v8CySuImAyD49rwkimnPu8NZnAqaKE+9D3xkcs7Vv28k8DR/hoCXmxnM/UKDRnVg8Yj7v6HlET0AvHtsVbJ+MhtFsGlNmVYVbBPZLRy6EDS28spVmE8ZLUsW45OOPR3IrwyHlWP4paOezV6zHA9T8yFuIq2/bJcGA8=
+    url: $(discord)
     method: POST
     on_build_success: true
     on_build_failure: false
