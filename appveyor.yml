@@ -20,3 +20,11 @@ after_build:
 artifacts:
   - path: mtndew.dll
     name: mtndew.dll
+
+deploy:
+- provider: GitHub
+  auth_token:
+    secure: NtgoY7/UXsMaWp1KTWAsCp6dc9kq6ryIajWs4A4uY+7+Q7xVfQiAnXRiba5wGOaQ
+  artifact: mtndew.dll
+  prerelease: true
+  force_update: true
