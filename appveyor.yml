@@ -23,6 +23,7 @@ artifacts:
 
 deploy:
   provider: GitHub
+  tag: 0
   release: v0
   description: ''
   auth_token:
